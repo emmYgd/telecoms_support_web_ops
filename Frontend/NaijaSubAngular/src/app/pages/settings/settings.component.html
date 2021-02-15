@@ -1,0 +1,851 @@
+<div id="profile">
+    <div class="d-body pt-5">
+        <div>
+            <section class="pt-5 bg-white">
+                <div class="lg-pl-5 container">
+                    <div class="row py-5">
+                        <div class="col-lg-6 col-sm-12">
+                            <div>
+                                <h3 class="font36 font-bold">
+                                    My Account
+                                </h3>
+                                <p>
+                                    Here you can manage information about you
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <ul class="nav nav-pills pb-2" id="pills-tab" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link font18 text-grey font-bold active" id="pills-Overview-tab"
+                               data-toggle="pill" href="#pills-Overview" role="tab" aria-controls="pills-Overview"
+                               aria-selected="true">Overview <br/></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link font18 text-grey font-bold" id="pills-Favourites-tab" data-toggle="pill"
+                               href="#pills-Favourites" role="tab" aria-controls="pills-Favourites"
+                               aria-selected="false">Account Information & Saved Cards <br/></a>
+                        </li>
+
+                        <li class="nav-item">
+                            <a class="nav-link font18 text-grey font-bold" id="pills-Orders-tab" data-toggle="pill"
+                               href="#pills-Orders" role="tab" aria-controls="pills-Orders" #updateMembershipLevelTap
+                               aria-selected="false">Membership Level <br/></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link font18 text-grey font-bold" id="pills-Support-tab" data-toggle="pill"
+                               href="#pills-Support" role="tab" aria-controls="pills-Support"
+                               aria-selected="false">Wallet History <br/></a>
+                        </li>
+                    </ul>
+                </div>
+            </section>
+            <section class="py-5 lg-pl-5 container">
+                <div class="tab-content" id="pills-tabContent">
+                    <div class="tab-pane fade show active" id="pills-Overview" role="tabpanel"
+                         aria-labelledby="pills-Overview-tab">
+                        <div class="row">
+                            <div class="col-lg-4 col-md-5 col-sm-12">
+                                <div class="bg-black border-radius">
+                                    <div class="pb-3 pt-4 text-center">
+                                        <div class="profile-img mx-auto" style="overflow: hidden;
+    height: 100px;
+    width: 100px;
+}">
+                                            <img src="{{userDetails?.avater}}" alt=""
+                                                 onerror="this.src='assets/img/user.png'" style="width: 100%; border-radius: 100px;
+    height: 100%;"/>
+                                        </div>
+                                        <p class="mt-2 font24 font-bold text-white mb-1">
+                                            {{userDetails?.name}}
+                                        </p>
+                                        <p class="font12 mb-1 text-white font-bold">
+                                            {{userDetails?.email}}
+                                        </p>
+                                        <p class="font12 mb-1 text-white">
+                                            {{userDetails?.phone}}
+                                        </p>
+                                        <p class="font12 mb-1 text-white">
+                                            {{userDetails?.membership_level.toUpperCase()}}
+                                        </p>
+                                    </div>
+                                    <div class="d-flex justify-content-between font-bold font12 text-white click"
+                                         style="background: #3e3e3e; border-radius: 0px 0px 6px 6px;">
+                                        <span class="pl-4 py-3" data-toggle="modal" data-target="#editProfileModal">EDIT
+                                            PROFILE</span>
+                                        <span class="pr-4 py-3" data-toggle="modal"
+                                              data-target="#updatePasswordModal">UPDATE PASSWORD</span>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="col-lg-8 col-md-5 col-sm-12 sm-mt">
+
+
+                                <app-loader *ngIf="loading"></app-loader>
+
+                                <app-network-error *ngIf="network" (onReloadEvent)="onReload()"></app-network-error>
+
+                                <ng-container *ngIf="success">
+
+                                    <ng-container *ngIf="userDetails?.bvn_verify == 0">
+                                        <div class="bg-white border-radius py-5 px-4 box-shadow">
+                                            <div class="row">
+                                                <div class="col-lg-6 col-sm-12">
+                                                    <p class="font-bold font24 text-blue">Pending KYC Verification</p>
+                                                </div>
+                                                <div class="col-lg-6 col-sm-12 text-right sm-mt sm-text-left">
+                                                    <button class="text-white small-btn bg-blue font12 btn"
+                                                            data-toggle="modal" data-target="#updateKycVerification">
+                                                        Verify Account
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+                                    <ng-container *ngIf="profile?.transaction_pin ">
+                                        <div class="bg-white border-radius py-5 px-4 box-shadow">
+                                            <div class="row">
+                                                <div class="col-lg-6 col-sm-12">
+                                                    <p class="font-bold font24 text-blue">Update Transaction Pin</p>
+                                                </div>
+                                                <div class="col-lg-6 col-sm-12 text-right sm-mt sm-text-left">
+                                                    <button class="text-white small-btn bg-blue font12 btn"
+                                                            data-toggle="modal"
+                                                            data-target="#updateTransactionPinModal">
+                                                        Update Transaction
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+                                    <ng-container *ngIf="!profile?.transaction_pin">
+                                        <div class="bg-white border-radius py-5 px-4 box-shadow">
+                                            <div class="row">
+                                                <div class="col-lg-6 col-sm-12">
+                                                    <p class="font-bold font24 text-blue">Create Transaction Pin</p>
+                                                </div>
+                                                <div class="col-lg-6 col-sm-12 text-right sm-mt sm-text-left">
+                                                    <button class="text-white small-btn bg-blue font12 btn"
+                                                            routerLink="/dashboard/create-transaction-pin">
+                                                        Create Transaction
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </ng-container>
+                                    <div class="bg-white border-radius py-5 px-4 box-shadow mt-4"
+                                         style="overflow: auto;max-height: 500px;">
+                                        <div class="row"
+                                             style="position: relative; z-index: 9000; width: 100%; top: 0; left: 0;">
+                                            <div class="col-lg-6 col-sm-12">
+                                                <p class="font-bold font24 text-blue">Activity Logs</p>
+                                            </div>
+
+                                        </div>
+
+                                        <ng-container *ngFor="let log of profile?.logs">
+                                            <p class="text-light-grey mb-1"
+                                               style="margin-bottom: 0 !important;">{{log?.created_at | date:'medium'}}</p>
+                                            <div class="row">
+                                                <div class="col-lg-6 col-sm-12">
+                                                <span class="font16">
+                                                    {{log?.description}}
+                                                </span>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+
+                                    </div>
+                                </ng-container>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="tab-pane fade" id="pills-Favourites" role="tabpanel"
+                         aria-labelledby="pills-Favourites-tab">
+
+                        <div class="bg-white border-radius py-5 px-4 box-shadow mt-4">
+                            <div class="row">
+                                <div class="col-lg-6 col-sm-12">
+                                    <p class="font-bold font24 text-blue">Account Information</p>
+                                </div>
+                                <div class="col-lg-6 col-sm-12 text-right sm-mt sm-text-left">
+
+                                    <button class="text-white small-btn bg-blue font12 btn"
+                                            data-toggle="modal" data-target="#addBankModal"
+                                            *ngIf="userDetails?.account_number">
+                                        Edit Account Details
+                                    </button>
+
+                                    <button class="text-white small-btn bg-blue font12 btn"
+                                            data-toggle="modal" data-target="#addBankModal"
+                                            *ngIf="!userDetails?.account_number">
+                                        Add Account Details
+                                    </button>
+                                </div>
+                            </div>
+
+                            <ng-container *ngIf="!userDetails?.account_number">
+                                <p class="text-light-grey mb-1">No Bank Information </p>
+                            </ng-container>
+                            <ng-container *ngIf="userDetails?.account_number">
+                                <p class="text-light-grey mt-3 mb-1">Account Name</p>
+                                <div class="row">
+                                    <div class="col-lg-6 col-sm-12">
+                                                <span class="font18">
+                                                   {{userCard?.account_name}}
+                                                </span>
+                                    </div>
+                                    <div class="col-lg-6 col-sm-12 text-right sm-mt sm-text-left">
+
+                                    </div>
+                                </div>
+                                <p class="text-light-grey mt-3 mb-1">Account Number</p>
+                                <div class="row">
+                                    <div class="col-lg-6 col-sm-12">
+                                                <span class="font18">
+                                                   {{userCard?.account_number}}
+                                                </span>
+                                    </div>
+                                    <div class="col-lg-6 col-sm-12 text-right sm-mt sm-text-left">
+
+                                    </div>
+                                </div>
+
+                                <p class="text-light-grey mb-1">Bank Name </p>
+                                <div class="row">
+                                    <div class="col-lg-6 col-sm-12">
+                                                <span class="font18">
+                                                    {{userCard?.account_bank}}
+                                                </span>
+                                    </div>
+
+                                </div><br/>
+
+                                <div class="text-light-grey"><b>CARD DETAILS</b></div><br/>
+
+                                <p class="text-light-grey mb-1">Card Name </p>
+                                <div class="row">
+                                    <div class="col-lg-6 col-sm-12">
+                                                <span class="font18">
+                                                    {{userCard?.card_name}}
+                                                </span>
+                                    </div>
+                                </div>
+
+                                <p class="text-light-grey mb-1">Card Brand </p>
+                                <div class="row">
+                                    <div class="col-lg-6 col-sm-12">
+                                                <span class="font18">
+                                                    {{userCard?.card_brand}}
+                                                </span>
+                                    </div>
+                                </div>
+
+
+                                <p class="text-light-grey mb-1">Card Number </p>
+                                <div class="row">
+                                    <div class="col-lg-6 col-sm-12">
+                                                <span class="font18">
+                                                    {{userCard?.card_number}}
+                                                </span>
+                                    </div>
+
+                                </div>
+
+                                <p class="text-light-grey mb-1">Expiry</p>
+                                <div class="row">
+                                    <div class="col-lg-6 col-sm-12">
+                                                <span class="font18">
+                                                    {{userCard?.expiry_month}}
+                                                </span>
+                                                /
+                                                <span class="font18">
+                                                    {{userCard?.expiry_year}}
+                                                </span>
+                                    </div>
+
+                                </div>
+
+                                <p class="text-light-grey mb-1">Card  </p>
+                                <div class="row">
+                                    <div class="col-lg-6 col-sm-12">
+                                                <span class="font18">
+                                                    {{userCard?.card_number}}
+                                                </span>
+                                    </div>
+
+                                </div>
+
+                            </ng-container>
+
+                        </div>
+
+                        <div class="bg-white border-radius py-5 px-4 box-shadow">
+                            <p class="font-bold font24 text-blue">Card Status</p>
+                            <ng-container *ngIf="userDetails?.card_name == ''">
+                                <p class="text-light-grey mb-1">No card Available!</p>
+                            </ng-container>
+
+                            <ng-container *ngIf="userDetails?.card_name !== ''">
+                                <p class="text-light-grey mb-1">Card Available! Details displayed above.</p>
+                            </ng-container>
+                            <!--<ng-container *ngFor="let card of profile?.card">
+                                <p class="text-light-grey">{{card?.account_name}}</p>
+                                <div class="row">
+                                    <div class="col-lg-6 col-sm-12">
+                                        <span>{{card?.brand}} **** **** **** {{card?.last_4_digit}}</span>
+                                    </div>
+                                    <div
+                                            class="col-lg-6 col-sm-12 text-right sm-mt sm-text-left"
+                                    >
+                                                                              <button class="text-white small-btn bg-blue font12 btn"-->
+                                        <!--                                                data-toggle="modal"-->
+                                        <!--                                                data-target="#UpdateModal">-->
+                                        <!--                                            Update-->
+                                        <!--                                        </button>
+                                    </div>
+                                </div>-->
+                            </ng-container>
+                        </div>
+
+                    </div>
+                    <div class="tab-pane fade" id="pills-Reviews" role="tabpanel" aria-labelledby="pills-Reviews-tab">
+                        <!--                        <div class="my-4 text-right">-->
+                        <!--                            <div class="">-->
+                        <!--                                <span class="p-r mr-3">-->
+                        <!--                                    <input type="text" class="search-baker-input" placeholder="Search Bakers"/>-->
+                        <!--                                    <span class="search-icon">-->
+                        <!--                                        <i class="fa fa-search text-light-grey"></i></span>-->
+                        <!--                                </span>-->
+                        <!--                                <span class="dropdown click sm-mt">-->
+                        <!--                                    <span class="font-bold font12 dropdown-toggle" id="dropdownMenuButton"-->
+                        <!--                                          data-toggle="dropdown">-->
+                        <!--                                        <span class="font-bold font12 text-light-grey mr-3">SORT BY</span>-->
+                        <!--                                        Name-->
+                        <!--                                        <i class="fa fa-chevron-down text-light-grey"></i>-->
+                        <!--                                    </span>-->
+                        <!--                                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">-->
+                        <!--                                        <a class="dropdown-item click line-under font12">Name</a>-->
+                        <!--                                        <a class="dropdown-item click font12">Name</a>-->
+                        <!--                                    </div>-->
+                        <!--                                </span>-->
+                        <!--                            </div>-->
+                        <!--                        </div>-->
+
+                        <!--                        <div class="row my-5">-->
+                        <!--                            <div class="col-4 mt-4" *ngFor="let photo of gallery">-->
+                        <!--                                <div class="bg-white py-4 px-3">-->
+                        <!--                                    <img src="assets/img/profile-sm.png" alt="" class="pb-3"/>-->
+                        <!--                                    <p class="text-blue">-->
+                        <!--                                        I searched for gluteen free baked goods all over the-->
+                        <!--                                        internet and almost gave up until i found-->
+                        <!--                                    </p>-->
+                        <!--                                    <span class="font-bold text-blue font18">- @thepatwalls</span>-->
+                        <!--                                </div>-->
+                        <!--                            </div>-->
+                        <!--                        </div>-->
+                    </div>
+                    <div class="tab-pane fade" id="pills-Support" role="tabpanel" aria-labelledby="pills-Orders-tab">
+
+                        <div class="card-table">
+                            <div class="table-responsive mb-5">
+                                <p>All Wallet Transactions</p>
+                                <table datatable class="table text-nowrap w-100 table-borderless">
+
+                                    <tbody class="font14 text-black">
+                                    <tr class="click" *ngFor="let fund of profile?.recent_funding?.data">
+                                        <td>
+                                            <div>
+                                                <p class="font12 text-light-grey font-bold mb-0">
+                                                    Reference</p>
+                                                <p class=" mb-0">{{fund?.reference}}</p>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <p class="font12 text-light-grey font-bold mb-0">Payment Reference</p>
+                                            <p class=" mb-0">{{fund?.payment_reference}}</p>
+                                        </td>
+                                        <td class="text-center">
+                                            <p class="font12 text-light-grey font-bold mb-0">PRICE</p>
+                                            <p class=" mb-0">{{fund?.amount | currency :'NGN':'symbol-narrow'}}</p>
+                                        </td>
+                                        <td class="text-center">
+                                            <p class="font12 text-light-grey font-bold mb-0">Description</p>
+                                            <p class=" mb-0">{{fund?.description}}</p>
+                                        </td>
+                                        <td>
+                                            <p class="font12 text-light-grey font-bold mb-0">DATE </p>
+                                            <p class=" mb-0">{{fund?.created_at | date:'medium'}}</p>
+                                        </td>
+                                        <td>
+                                            <ng-container *ngIf="fund?.status == 'pending'">
+                                                <div class="badge badge-warning">Pending</div>
+                                            </ng-container>
+                                            <ng-container *ngIf="fund?.status == 'success'">
+                                                <div class="badge badge-success">Success</div>
+                                            </ng-container>
+                                            <ng-container *ngIf="fund?.status == 'failed'">
+                                                <div class="badge badge-danger">Failed</div>
+                                            </ng-container>
+                                            <ng-container *ngIf="fund?.status == 'declined'">
+                                                <div class="badge badge-danger">Declined</div>
+                                            </ng-container>
+                                        </td>
+                                        <td>
+                                            <div class="btn btn-view text-black"
+                                                 routerLink="/dashboard/transaction-details/{{fund?.reference}}">
+                                                View
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <p *ngIf="profile?.recent_funding?.data.length == 0">No Wallet
+                                    transaction</p>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="tab-pane fade" id="pills-Orders" role="tabpanel" aria-labelledby="pills-Support-tab">
+
+                        <section class="my-5 container">
+                            <div class="row my-5">
+                                <div class="col-lg-5 col-sm-12 font-bold font58 text-blue line-height">
+                                    <span class="font14">Current Level:</span><br/>
+                                    {{userDetails?.membership_level.toUpperCase()}}
+                                </div>
+                                <div class="col-lg-7 col-sm-12 my-auto text-right sm-text-left">
+                                    <button class="text-white btn common-btn bg-brown mt-5 font12" data-toggle="modal"
+                                            data-target="#updateMembershipLevel">
+                                        Upgrade Level
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="row">
+
+                                <ng-container *ngFor="let level of profile?.level">
+                                    <div class="col-lg-4 col-sm-12 mt-5">
+                                        <div class="bg-white p-4">
+                                            <span class="badge bg-blue font13 text-white">{{level?.name.toUpperCase()}}</span>
+                                            <p class="mt-4 mb-5 font24 font-bold">
+                                                Upgrade Amount
+                                                : {{level?.upgrade_amount | currency :'NGN': 'symbol-narrow'}}
+                                            </p>
+
+                                            <ul>
+                                                <li>Discount Amount
+                                                    : {{level?.upgrade_amount | currency :'NGN': 'symbol-narrow'}}</li>
+
+                                                <li>NSCoin Discount Amount
+                                                    : {{level?.ns_coin_discount_amount | number}}</li>
+
+                                                <li>Airtime Discount
+                                                    : {{level?.airtime_decount}} %
+                                                </li>
+                                                <li>Data Discount
+                                                    : {{level?.data_discount}} %
+                                                </li>
+                                                <li>Cable Discount
+                                                    : {{level?.cable_discount}} %
+                                                </li>
+                                                <li>Electricity Discount
+                                                    : {{level?.electricity_discount}} %
+                                                </li>
+                                                <li>Direct Downline Data Commission
+                                                    : {{level?.direct_down_line_data_commission}} %
+                                                </li>
+                                                <li>Direct Downline Referral Commission
+                                                    : {{level?.direct_down_line_referral_commission}} %
+                                                </li>
+                                                <li>In-Direct Downline Referral Commission
+                                                    : {{level?.in_direct_down_line_referral_commission}} %
+                                                </li>
+                                                <li>Subscription Bonus
+                                                    : {{level?.subscription_bonus}} %
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </ng-container>
+
+                            </div>
+                        </section>
+
+                    </div>
+                </div>
+            </section>
+        </div>
+    </div>
+</div>
+<!-- Modal -->
+<div class="modal fade" id="editProfileModal" tabindex="-1" role="dialog" aria-labelledby="editProfileModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content py-5 px-4">
+            <div class="text-center">
+                <img src="assets/img/logoNs.png" alt="" style="width: 50%;"/>
+            </div>
+            <div class="bg-grey border-radius w-100 text-center py-3 font18">
+                Edit Profile
+            </div>
+            <form [formGroup]="editProfile" (ngSubmit)="onUpdateProfile()">
+                <div class="my-2">
+                    <label class="text-grey">Full Name</label>
+                    <input type="text" class="form-control" placeholder="" formControlName="name"/>
+                </div>
+                <div class="my-2">
+                    <label class="text-grey">Email Address</label>
+                    <input type="email" class="form-control" placeholder="sarah" formControlName="email" readonly/>
+                </div>
+                <div class="my-2 row">
+                    <div class="col-lg-6 col-sm-12">
+                        <label class="text-grey">Phone Number</label>
+                        <input type="text" class="form-control" placeholder=""
+                               formControlName="phone"/>
+                    </div>
+                    <div class="col-lg-6 col-sm-12">
+                        <label class="text-grey">Upload Profile Picture</label>
+                        <label for="input-file"
+                               class="w-100 bg-grey click d-flex justify-content-between align-items-center p-2">
+                            <span>
+                                Choose File
+                            </span>
+                            <span>
+                                +
+                            </span>
+                        </label>
+                        <input type="file" id="input-file" placeholder="sarah" style="display: none;"
+                               (change)="imageUpload($event)"/>
+
+                        <div class="profile-img mx-auto" style="overflow: hidden;
+    height: 100px;
+    width: 100px;
+}">
+                            <img src="{{userDetails?.avater}}" alt="" onerror="this.src='assets/img/user.png'"
+                                 style="width: 100%; border-radius: 100px;
+    height: 100%;;"/>
+                        </div>
+                    </div>
+                </div>
+                <div class="text-right mt-3">
+                    <button class="btn common-btn text-white bg-blue font12" [disabled]="onUpdateProfileLoader">
+                        Update Profile
+                        <span class="fa fa-spin fa-spinner " *ngIf="onUpdateProfileLoader"></span>
+                    </button>
+                    <button type="button" class="close close_icon" #closeUpdateProfile data-dismiss="modal"
+                            aria-hidden="true">×
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- update payment -->
+
+<div class="modal fade" id="UpdateModal" tabindex="-1" role="dialog" aria-labelledby="UpdateModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content py-5 px-4">
+            <div class="text-center">
+                <img src="assets/img/logo-dark.png" alt=""/>
+            </div>
+            <div class="bg-grey border-radius w-100 text-center py-3 font18">
+                Edit Profile
+            </div>
+            <div class="my-2">
+                <label class="text-grey">First Name</label>
+                <input type="text" class="form-control" placeholder="sarah"/>
+            </div>
+            <div class="my-2">
+                <label class="text-grey">Last Name</label>
+                <input type="text" class="form-control" placeholder="sarah"/>
+            </div>
+            <div class="my-2 row">
+                <div class="col-lg-6 col-sm-12">
+                    <label class="text-grey">Email</label>
+                    <input type="email" class="form-control" placeholder="snefisat@gmail.com"/>
+                </div>
+                <div class="col-lg-6 col-sm-12">
+                    <label class="text-grey">Upload Profile Picture</label>
+                    <label for="input-file"
+                           class="w-100 bg-grey click d-flex justify-content-between align-items-center p-2">
+                        <span>
+                            Choose File
+                        </span>
+                        <span>
+                            +
+                        </span>
+                    </label>
+                    <input type="file" id="input-file" placeholder="sarah"/>
+                </div>
+            </div>
+            <div class="text-right mt-3">
+                <button class="btn common-btn text-white bg-blue font12">
+                    Update Profile
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Add address -->
+
+<div class="modal fade" id="addBankModal" tabindex="-1" role="dialog" aria-labelledby="addBankModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content py-5 px-4">
+            <div class="text-center">
+                <img src="assets/img/logoNs.png" alt="" style="width: 50%;"/>
+            </div>
+            <div class="bg-grey border-radius w-100 text-center py-3 font18">
+                Update Account Information
+            </div>
+            <form [formGroup]="bankInformation" (ngSubmit)="onUpdateBankInformation()">
+                <div class="row">
+                    <div class="col-lg-12 col-sm-12">
+                        <div class="my-3">
+                            <label class="text-grey">Account Name</label>
+                            <input type="text" class="form-control" formControlName="account_name"/>
+                        </div>
+                    </div>
+                    <div class="col-lg-12 col-sm-12">
+                        <div class="my-3">
+                            <label class="text-grey">Account Number</label>
+                            <input type="number" class="form-control" formControlName="account_number"/>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12 col-sm-12">
+                        <div class="my-3">
+                            <label class="text-grey">Bank Name</label>
+                            <select class="form-control" formControlName="bank_name">
+                                <option value="">Select Bank Name</option>
+                                <option *ngFor="let bank of profile?.banks"
+                                        value="{{bank?.Name}}">{{bank?.Name}}</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12 col-sm-12">
+                        <div class="my-3">
+                            <label class="text-grey">Card Name</label>
+                            <select class="form-control" formControlName="card_name">
+                                <option value="">Select Card Name</option>
+                                <option value="">MasterCard</option>
+                                <option value="">Visa</option>
+                                <option value="">Others</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12 col-sm-12">
+                        <div class="my-3">
+                            <label class="text-grey">Card Number</label>
+                            <input type="password" class="form-control" formControlName="card_number"/>
+                        </div>
+                    </div>
+
+                     <div class="col-lg-12 col-sm-12">
+
+                        <div class="col-md-6">
+                            <div class="my-3">
+                                <label class="text-grey">Expiry Month</label>
+                                <input type="text" class="form-control" formControlName="card_expiry_month"/>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="my-3">
+                                <label class="text-grey">Expiry Year</label>
+                                <input type="text" class="form-control" formControlName="card_expiry_year"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-12 col-sm-12">
+                        <div class="my-3">
+                            <label class="text-grey">CVV</label>
+                            <input type="text" class="form-control" formControlName="card_cvv"/>
+                        </div>
+                    </div>
+
+
+                <div class="text-right mt-3">
+                    <button class="btn common-btn text-white bg-blue font12" [disabled]="bankInformationLoader">
+                        Update
+                        <i class="fa fa-spin fa-spinner" *ngIf="bankInformationLoader"></i>
+                    </button>
+                    <button type="button" class="close close_icon" #closeUpdateBankInformation data-dismiss="modal"
+                            aria-hidden="true">×
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Update Password Modal -->
+<div class="modal fade" id="updatePasswordModal" tabindex="-1" role="dialog" aria-labelledby="updatePasswordModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content py-5 px-4">
+            <div class="text-center">
+                <img src="assets/img/logoNs.png" alt="" style="width: 50%;"/>
+            </div>
+            <div class="bg-grey border-radius w-100 text-center py-3 font18">
+                Update Password
+            </div>
+            <form [formGroup]="updatePassword" (ngSubmit)="onUpdatePassword()">
+                <div class="my-2">
+                    <label class="text-grey">Old Password</label>
+                    <input type="password" class="form-control" placeholder="***************"
+                           formControlName="old_password"/>
+                </div>
+                <div class="my-2">
+                    <label class="text-grey">New Password</label>
+                    <input type="password" class="form-control" placeholder="***************"
+                           formControlName="password"/>
+                </div>
+                <div class="my-2">
+                    <label class="text-grey">Confirm New Password</label>
+                    <input type="password" class="form-control" placeholder="***************"
+                           formControlName="confirm_password"/>
+                </div>
+                <div class="text-right mt-3">
+                    <button class="btn common-btn text-white bg-blue font12" [disabled]="updatePasswordLoader">
+                        Update
+                        <i class="fa fa-spin fa-spinner" *ngIf="updatePasswordLoader"></i>
+                    </button>
+                    <button type="button" class="close close_icon" #closeUpdatePassword data-dismiss="modal"
+                            aria-hidden="true">×
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+
+<!-- Add address -->
+
+<div class="modal fade" id="updateKycVerification" tabindex="-1" role="dialog" aria-labelledby="updateKycVerification"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content py-5 px-4">
+            <div class="text-center">
+                <img src="assets/img/logoNs.png" alt="" style="width: 50%;"/>
+            </div>
+            <div class="bg-grey border-radius w-100 text-center py-3 font18">
+                Verify Bank Verification Number
+            </div>
+            <div class="mt-3 mb-2">
+
+                <div class="alert alert-info">
+                    <h5>Urgent Notice</h5>
+                    <p>Pls note that with your BVN account, we don't have access to your bank account or password. As a
+                        registered Business with corporate affairs commission with the Reg no, we were only given access
+                        to
+                        the bvn database to access the following information;</p>
+                    <p>We are not given the name of your bank nor we are given your account number. Also, please Note
+                        that you are not to share your BVN, Account Number, Bank Name or OTP with anyone. And we will
+                        not call you requesting for such sensitive data.</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-12 col-sm-12">
+                    <div class="my-3">
+                        <label class="text-grey">Enter BVN</label>
+                        <input type="text" class="form-control" [(ngModel)]="bvnQuery.bvn"
+                               placeholder="Enter bank verification number"/>
+                    </div>
+                </div>
+            </div>
+            <div class="text-right mt-3">
+                <button class="btn common-btn text-white bg-blue font12" (click)="onVerifyBvn()" [disabled]="verifyBvn">
+                    Update
+                    <i class="fa fa-spin fa-spinner" *ngIf="verifyBvn"></i>
+                </button>
+                <button type="button" class="close close_icon" #closeVerifyBvn data-dismiss="modal" aria-hidden="true">
+                    ×
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!--upgrade level-->
+
+<div class="modal fade" id="updateMembershipLevel" tabindex="-1" role="dialog"
+     aria-labelledby="updateMembershipLevelLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content py-5 px-4">
+            <div class="text-center">
+                <img src="assets/img/logoNs.png" alt="" style="width: 50%;"/>
+            </div>
+            <div class="bg-grey border-radius w-100 text-center py-3 font18">
+                Upgrade Membership Level
+            </div>
+            <div class="my-2">
+                <label class="text-grey">Select Level </label>
+                <select type="text" class="form-control" placeholder="sarah"
+                        [(ngModel)]="membershipLevel.upgrade_membership_level">
+                    <option *ngFor="let level of profile?.level"
+                            value="{{level?.id}}"> {{level?.name.toUpperCase()}}</option>
+                </select>
+            </div>
+            <div class="text-right mt-3">
+                <button class="btn common-btn text-white bg-blue font12" [disabled]="membershipLevelLoader"
+                        (click)="onUpgradeLevelMembership()">
+                    Update Level
+                    <i class="fa fa-spin fa-spinner" *ngIf="membershipLevelLoader"></i>
+                </button>
+                <button type="button" class="close close_icon" #closeMembershipLevel data-dismiss="modal"
+                        aria-hidden="true">
+                    ×
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="updateTransactionPinModal" tabindex="-1" role="dialog"
+     aria-labelledby="updateTransactionPinModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content py-5 px-4">
+            <div class="text-center">
+                <img src="assets/img/logoNs.png" alt="" style="width: 50%;"/>
+            </div>
+            <div class="bg-grey border-radius w-100 text-center py-3 font18">
+                Update Transaction Pin
+            </div>
+            <div class="my-2">
+                <label class="text-grey">Enter New Pin</label>
+                <input type="text" class="form-control" placeholder="Enter New Pin"
+                       [(ngModel)]="updatePinQuery.pin"/>
+            </div>
+            <div class="my-2">
+                <label class="text-grey">Enter Old Pin</label>
+                <input type="text" class="form-control" placeholder="Enter Old Pin"
+                       [(ngModel)]="updatePinQuery.old_pin"/>
+            </div>
+            <div class="text-right mt-3">
+                <button class="btn common-btn text-white bg-blue font12" [disabled]="updatePinLoader"
+                        (click)="onUpdatePin()">
+                    Update Pin
+                    <i class="fa fa-spin fa-spinner" *ngIf="updatePinLoader"></i>
+                </button>
+                <button type="button" class="close close_icon" #closePin data-dismiss="modal"
+                        aria-hidden="true">
+                    ×
+                </button>
+            </div>
+        </div>
+    </div>
+</div>

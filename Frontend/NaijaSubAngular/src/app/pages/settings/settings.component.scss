@@ -1,0 +1,110 @@
+.nav-pills .nav-link {
+  color: #c9c9c9;
+}
+
+.nav-pills .nav-link.active,
+.nav-pills .show > .nav-link {
+  background: transparent !important;
+  color: #484848 !important;
+}
+
+.button-pills{
+  .nav-pills .nav-link  button{
+    color: white;
+    background: #1d293f !important;
+  }
+
+  .nav-pills .nav-link.active button,
+  .nav-pills .show > .nav-link {
+    background: transparent !important;
+    color: #1d293f !important;
+    border: solid 1px #1d293f;
+  }
+}
+/* Style the checkmark/indicator */
+.check-container .checkmark:after {
+  left: 4px !important;
+  top: 1px;
+}
+textarea::placeholder {
+  opacity: 0.4;
+}
+.btn-stripe {
+  background: #3b8bd7 !important;
+  padding: 0.4rem 1rem !important;
+  font-size: 11px;
+}
+
+.search-baker-input {
+  padding: 0.8rem 1rem;
+  border-radius: 30px;
+  border: none;
+  &::placeholder {
+    color: #b9b9b9;
+  }
+}
+@media (max-width: 900px) {
+  .search-baker-input {
+    width: 100%;
+  }
+}
+.search-icon {
+  position: absolute;
+  right: 18px;
+  top: -2px;
+}
+.view-baker {
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+.gallery-star {
+  position: absolute;
+  bottom: 10px;
+  right: 15px;
+}
+@media(max-width:900px){
+  .gallery-star{
+    position: absolute;
+    bottom: 3px;
+    right: 4px;
+    width: 22px;
+  }
+}
+.card-table{
+  .pending-badge{
+    border: 1px solid #FFC850;
+    box-sizing: border-box;
+    border-radius: 18px;
+    padding: .4rem .9rem;
+    color: #ffc850;
+  }
+  .completed-badge{
+    border: 1px solid #1CB4AE;
+    box-sizing: border-box;
+    border-radius: 18px;
+    padding: .4rem .9rem;
+    color: #1cb4ae;
+  }
+  .failed-badge{
+    border: 1px solid red;
+    box-sizing: border-box;
+    border-radius: 18px;
+    padding: .4rem .9rem;
+    color: red;
+  }
+
+}
+
+.table-search input {
+  width: 100%;
+  border-right: 0.5px solid #dfdfdf;
+  border-left:none !important;
+  border-top: none;
+  border-bottom: none;
+  padding: 0.8rem;
+  &::placeholder {
+    font-size: 14px;
+    color: #b9b9b9;
+  }
+}

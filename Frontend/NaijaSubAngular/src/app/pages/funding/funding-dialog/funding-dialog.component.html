@@ -1,0 +1,6 @@
+<div>
+    <i (click)="onClose()" class="fa fa-close" style="text-align: right;padding: 10px;cursor: pointer; font-size: 20px;"></i>
+</div>
+<hr>
+<app-funding-details [selectedMethod]="[selected,details]"
+                     (fetchEvent)="onReload()"></app-funding-details>

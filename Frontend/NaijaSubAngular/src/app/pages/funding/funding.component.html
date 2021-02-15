@@ -1,0 +1,41 @@
+<app-loader *ngIf="loading"></app-loader>
+
+<app-network-error *ngIf="network" (onReloadEvent)="onReload()"></app-network-error>
+
+<ng-container *ngIf="success">
+
+    <header style="height: 10vh;">
+
+    </header>
+    <section class="pb-5 container">
+
+        <div class="row">
+            <div class="col-lg-3 col-sm-12 h-100">
+                <div class="bg-white py-4 browse-category my-4">
+                    <p class="font18 font-bold text-blue px-4">Choose Preferred Funding method</p>
+                    <p class="text-blue px-4 py-3 click mb-0"
+                       (click)="onSelectFunding(method)"
+                       *ngFor="let method of details?.method"
+                       [ngClass]="{'active' : method?.index == selected?.index}"
+                       style="text-transform: capitalize;">
+                        {{method?.display}}
+                    </p>
+                </div>
+            </div>
+            <div class="col-lg-9 col-sm-12">
+                <div class="row">
+                    <div class="col-lg-12 col-sm-12 my-4">
+                        <ng-container *ngIf="!mobile">
+                            <app-funding-details [selectedMethod]="[selected,details]"
+                                                 (fetchEvent)="onReload()"></app-funding-details>
+                        </ng-container>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+
+
+</ng-container>
+

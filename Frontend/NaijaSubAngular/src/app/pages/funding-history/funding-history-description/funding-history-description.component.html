@@ -1,0 +1,79 @@
+<div style="width: 100%;">
+    <i (click)="onClose()" class="fa fa-close"
+       style="text-align: right;padding: 10px;cursor: pointer; font-size: 20px;"></i>
+
+    <span class="badge" style="float:right; margin-top: 10px;margin-right: 10px;" [ngClass]="
+                        {
+                        'badge-success': data?.data?.status == 'success',
+                        'badge-warning' : data?.data?.status == 'pending',
+                        'badge-danger': data?.data?.status == 'failed' || data?.data?.status == 'declined'
+                        }
+">
+                            {{data?.data?.status}}
+                        </span>
+</div>
+<hr>
+
+<div style="padding: 10px;">
+    <div class="card" style="border-radius: 0; outline: none;">
+        <div style="padding: 20px" class="succes-rep">
+            <!--                <div class="alert alert-danger alert-dismissible fade show" role="alert" *ngIf='error_stat_confirm'>-->
+            <!--                    <span class="alert-text"> {{error_message_confirm}}</span>-->
+            <!--                </div>-->
+
+            <div class="row">
+                <div class="col-lg-4">
+                    <p class="subtle " style="font-size: 12px; font-weight: normal;">Funding Reference </p>
+                    <p class="main-text">
+                        {{data?.data?.reference}}</p>
+                </div>
+
+                <div class="col-lg-4">
+                    <p class="subtle" style="font-size: 12px; font-weight: normal;">Payment Reference </p>
+                    <p class="main-text">
+                        {{data?.data?.payment_reference || '--'}}</p>
+                </div>
+
+                <div class="col-lg-4">
+                    <p class="subtle" style="font-size: 12px; font-weight: normal;">Funding Type </p>
+                    <p class="main-text">
+                        {{transactionType(data?.data?.transaction_type)}}</p>
+                </div>
+
+                <!--                <p class="subtle">Amount to Fund</p>-->
+                <!--                <p class="main-text">{{fundWallet.get('amount').value | currency : 'NGN' : 'symbol-narrow'}}</p>-->
+            </div>
+
+            <div class="row">
+                <div class="col-lg-4">
+                    <p class="subtle" style="font-size: 12px; font-weight: normal;">Description </p>
+                    <p class="main-text">
+                        {{data?.data?.description}}</p>
+                </div>
+
+                <div class="col-lg-4">
+                    <p class="subtle" style="font-size: 12px; font-weight: normal;">Created At </p>
+                    <p class="main-text">
+                        {{data?.data?.created_at | date : 'medium'}}</p>
+                </div>
+
+
+            </div>
+
+
+            <div class="row">
+
+
+                <div class="col-4">
+                    <p class="subtle" style="font-size: 12px; font-weight: normal;">Total</p>
+                    <p class="main-text">&#x20A6;{{data?.data?.amount | number}}</p>
+                    <br>
+                </div>
+
+            </div>
+
+
+        </div>
+
+    </div>
+</div>

@@ -1,0 +1,14 @@
+.login {
+  min-height: 100vh;
+  background: url('../../../assets/img/N2.jpg');
+  background-position: center;
+  background-size: cover;
+  padding: 3vh 8vw;
+}
+
+.login-row {
+  min-height: 66vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}

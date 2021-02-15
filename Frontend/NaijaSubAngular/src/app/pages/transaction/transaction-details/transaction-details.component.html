@@ -1,0 +1,276 @@
+<p>transaction-details works!</p>
+<app-loader *ngIf="loading"></app-loader>
+
+<app-network-error *ngIf="network" (onReloadEvent)="onReload()"></app-network-error>
+
+<ng-container *ngIf="success">
+    <header style="height: 10vh;">
+
+    </header>
+
+    <section class="pb-5 container">
+        <div class="row">
+
+            <div class="pro-tip px-3 py-2" style="cursor: pointer; float:right; " (click)="onBack()">
+        <span class="text-orange">
+            <i class="fa fa-arrow-left"></i> Back
+        </span>
+            </div>
+
+            <div class="col-lg-6 my-4 center-div" style="    margin: 0 auto;">
+
+                <div class="card shadow" style="max-height: 100%; height: 100%; border-radius: 0; ">
+                    <div style="padding: 20px" class="succes-rep">
+
+                        <div class="mt-4">
+                            <p class="text-light-grey font12 font-bold" style="margin-top: 0; padding-top: 0;">
+                                {{info?.transaction_name?.toUpperCase()}}</p>
+                        </div>
+
+                        <div class="row"
+                             *ngIf="details?.token">
+                            <div class="col-lg-12">
+                                <p class="text-light-grey font12 font-bold" style="margin-top: 0; padding-top: 0;">
+                                    Token: </p>
+                                <p class="font30" style="text-align: center; color: #222222;">
+                                    {{details?.token}}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-4">
+                                <p class="text-light-grey font12 font-bold"
+                                   style="margin-top: 0; padding-top: 0; margin-bottom: 0;">
+                                    Reference </p>
+                                <p class="font14" style="color: #222222;">
+                                    {{details?.reference}}
+                                </p>
+                            </div>
+                            <div class="col-lg-4" *ngIf="details?.token">
+                                <p class="text-light-grey font12 font-bold"
+                                   style="margin-top: 0; padding-top: 0; margin-bottom: 0;">
+                                    Units
+                                </p>
+                                <p class="font14" style="color: #222222; text-transform: capitalize !important;">
+                                    {{details?.units}}
+                                </p>
+                            </div>
+
+                            <div class="col-lg-4">
+                                <p class="text-light-grey font12 font-bold"
+                                   style="margin-top: 0; padding-top: 0; margin-bottom: 0;">
+                                    Service Type
+                                </p>
+                                <p class="font14" style="color: #222222; text-transform: capitalize !important;">
+                                    {{info?.type}} Service
+                                </p>
+                            </div>
+
+                            <div class="col-lg-4">
+                                <p class="text-light-grey font12 font-bold"
+                                   style="margin-top: 0; padding-top: 0; margin-bottom: 0;">
+                                    Status </p>
+                                <p class="font12">
+                                    <span class="badge"
+                                          [ngClass]="{
+                                          'badge-success' : details?.status == 'success',
+                                          'badge-warning' : details?.status == 'pending',
+                                          'badge-danger' : details?.status == 'failed' || details?.status == 'declined'
+                                          }">
+                                        {{details?.status}}
+                                    </span>
+                                </p>
+                            </div>
+
+                        </div>
+
+                        <div class="row">
+                            <div class="col-lg-4" *ngIf="details?.fetch_packages">
+                                <p class="text-light-grey font12 font-bold"
+                                   style="margin-top: 0; padding-top: 0; margin-bottom: 0;">
+                                    Package Name
+                                </p>
+                                <p class="font14" style="color: #222222;">
+                                    {{details?.fetch_packages?.name}}
+                                </p>
+                            </div>
+
+                            <div class="col-lg-4"
+                                 *ngIf="info?.type !== 'funding' && info?.type !== 'electricity'&& info?.type !== 'withdraw' &&  info?.type !== 'e_pin'">
+                                <p class="text-light-grey font12 font-bold"
+                                   style="margin-top: 0; padding-top: 0; margin-bottom: 0;">
+                                    Service
+                                </p>
+                                <p class="font14" style="color: #222222; text-transform: capitalize !important;">
+                                    {{details?.fetch_sub_service?.name}}
+                                </p>
+                            </div>
+
+                            <ng-container *ngIf="info?.paid_into">
+                                <div class="col-lg-4">
+                                    <p class="text-light-grey font12 font-bold"
+                                       style="margin-top: 0; padding-top: 0; margin-bottom: 0;">
+                                        Bank Name </p>
+                                    <p class="font12">
+                                        {{info?.paid_into_details?.bank_name}}
+                                    </p>
+                                </div>
+
+                                <div class="col-lg-4">
+                                    <p class="text-light-grey font12 font-bold"
+                                       style="margin-top: 0; padding-top: 0; margin-bottom: 0;">
+                                        Account Name</p>
+                                    <p class="font12">
+                                        {{info?.paid_into_details?.account_name}}
+                                    </p>
+                                </div>
+
+                                <div class="col-lg-4">
+                                    <p class="text-light-grey font12 font-bold"
+                                       style="margin-top: 0; padding-top: 0; margin-bottom: 0;">
+                                        Account Number</p>
+                                    <p class="font12">
+                                        {{info?.paid_into_details?.account_number}}
+                                    </p>
+                                </div>
+                            </ng-container>
+
+                        </div>
+
+                        <div class="row">
+
+                            <ng-container *ngIf="info?.type !== 'funding' && info?.type !== 'withdraw'">
+
+                                <div class="col-lg-4">
+                                    <p class="text-light-grey font12 font-bold"
+                                       style="margin-top: 0; padding-top: 0; margin-bottom: 0;">
+                                        Bonus </p>
+                                    <p class="font14" style="color: #222222;">
+                                        {{info?.bonus || 0}}%
+                                    </p>
+                                </div>
+
+                                <div class="col-lg-4">
+                                    <p class="text-light-grey font12 font-bold"
+                                       style="margin-top: 0; padding-top: 0; margin-bottom: 0;">
+                                        NSCOIN Bonus </p>
+                                    <p class="font14" style="color: #222222;">
+                                        {{info?.ns_coin_bonus || 0}} <span style="font-size: 12px;">nscoin</span>
+                                    </p>
+                                </div>
+
+                            </ng-container>
+
+                            <div class="col-lg-4" *ngIf="details?.type == 'electricity'">
+                                <p class="text-light-grey font12 font-bold"
+                                   style="margin-top: 0; padding-top: 0; margin-bottom: 0;">
+                                    Units</p>
+                                <p class="font14" style="color: #222222;">
+                                    {{details?.units || 0}}
+                                </p>
+                            </div>
+
+                            <div class="col-lg-4">
+                                <p class="text-light-grey font12 font-bold"
+                                   style="margin-top: 0; padding-top: 0; margin-bottom: 0;">
+                                    Description</p>
+                                <p class="font14" style="color: #222222;">
+                                    {{details?.description || 0}}
+                                </p>
+                            </div>
+
+
+                            <div class="col-lg-4">
+                                <p class="text-light-grey font12 font-bold"
+                                   style="margin-top: 0; padding-top: 0; margin-bottom: 0;">
+                                    Date Created</p>
+                                <p class="font14" style="color: #222222;">
+                                    {{details?.created_at | date : 'medium'}}
+                                </p>
+                            </div>
+
+
+                            <div class="col-lg-4">
+                                <p class="text-light-grey font12 font-bold"
+                                   style="margin-top: 0; padding-top: 0; margin-bottom: 0;">
+                                    Total Amount </p>
+                                <p class="font14" style="color: #222222;">
+                                    {{details?.amount | currency :'NGN' : 'symbol-narrow'}}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="row" *ngIf="info?.type == 'airtime' ">
+                            <div class="col-lg-4">
+                                <p class="text-light-grey font12 font-bold" style="margin-top: 0; padding-top: 0; margin-bottom: 0 !important;">
+                                    Airtime Service Type</p>
+                                <p class="font12" style="color: #222222; display: block; margin-top: 0 !important;">
+                                    {{(details?.sender_details) ? (info?.is_sell?.pin) ? 'Airtime pin sale' : 'Airtime share n sale ' : 'Airtime Purchase'}}
+                                </p>
+                            </div>
+                        </div>
+
+                        <div class="row" style="padding-left: 15px;">
+                            <ng-container *ngIf="info?.type == 'airtime' && info?.is_sell?.pin">
+                                <p class="font12 text-light-grey font-bold mb-0">
+                                    Airtime Pin</p>
+                                <table datatable class="table text-nowrap w-100 table-borderless">
+                                    <tr class="click"
+                                        *ngFor="let pin of onPinSplit(info?.is_sell?.pin); let i= index">
+
+                                        <td>
+                                            <div class="row">
+
+                                                - <p class=" mb-0">{{pin}}</p>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </ng-container>
+                        </div>
+
+                        <div class="card-table" *ngIf="info?.type == 'e_pin'">
+                            <div class="table-responsive mb-5">
+                                <table datatable class="table text-nowrap w-100 table-borderless">
+
+                                    <tbody class="font14 text-black">
+                                    <tr class="click" *ngFor="let pin of info?.pin_generated; let i= index">
+
+                                        <td>
+                                            <div>
+                                                <p class="font12 text-light-grey font-bold mb-0">
+                                                    Tag</p>
+                                                <p class=" mb-0">{{pin?.tag }}</p>
+                                            </div>
+                                        </td>
+
+                                        <td class="text-center">
+                                            <p class="font12 text-light-grey font-bold mb-0">Amount</p>
+                                            <p class=" mb-0">{{pin?.amount | currency :'NGN':'symbol-narrow'}}</p>
+                                        </td>
+                                        <td class="text-center">
+                                            <p class="font12 text-light-grey font-bold mb-0">E-Pin</p>
+                                            <p class=" mb-0">{{pin?.pin}}</p>
+                                        </td>
+                                        <td>
+                                            <p class="font12 text-light-grey font-bold mb-0">Serial Number </p>
+                                            <p class=" mb-0">{{pin?.serial}}</p>
+                                        </td>
+
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                <span *ngIf="info?.pin_generated.length == 0"
+                                      class="table text-nowrap w-100 table-borderless">
+                            No Pin Generated
+                        </span>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</ng-container>

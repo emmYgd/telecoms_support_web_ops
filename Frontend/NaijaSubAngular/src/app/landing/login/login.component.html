@@ -1,0 +1,69 @@
+<section class="login d-body">
+    <div>
+        <img src="assets/img/logoNs.png" alt="" class="my-5" style="width: 50%;"/>
+
+        <div class="login-row">
+            <div class="row">
+                <div class="col-lg-5 col-sm-12 text-white my-auto">
+                    <div>
+                        <p class="font21 font-light mt-4" style="color: #02D871;">
+                            Enjoy our cheap data services , airtime services and many more...
+                        </p>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-sm-12 "></div>
+                <div class="col-lg-4 col-sm-12 ">
+                    <div class="bg-white border-radius py-5 px-4">
+                        <div class="text-center font32 font-light">
+                            <b>Welcome back'<br/>
+                            Login with either your Email or Username.</b>
+                        </div>
+                        <form [formGroup]="login" (ngSubmit)="onLogin()">
+                            <div class="my-4">
+                                <label class="text-grey">Email Address/Username</label>
+                                <input type="text" class="border form-control" placeholder="ns@example.com or fancyname1"
+                                       formControlName="email_username"
+                                       [ngClass]="{ 'is-invalid': submitted && f.email_username.errors}"/>
+                                <div class="invalid-feedback" *ngIf='submitted && f.email_username.errors'>
+                                    <div *ngIf="f.email_username.errors.required">Email Address or Username is required *</div>
+                                </div>
+                            </div>
+                            <div class="my-4">
+                                <label class="text-grey">Password</label>
+                                <input type="password" class="border form-control" placeholder="********"
+                                       formControlName="password"
+                                       [ngClass]="{ 'is-invalid': submitted && f.password.errors}"/>
+                                <div class="invalid-feedback" *ngIf='submitted && f.password.errors'>
+                                    <div *ngIf="f.password.errors.required">Password is required *</div>
+                                </div>
+                            </div>
+                            <a routerLink="/forgot-password" class="mt-4 text-grey font12 text-underline font-light">Forgot
+                                Password?</a>
+                            <div class="text-right">
+                                <button class="btn common-btn bg-brown" type="submit" [disabled]="loading">
+                                    Login
+                                    <i class="fa fa-spin fa-spinner" *ngIf="loading"></i>
+                                </button>
+                            </div>
+                        </form>
+                        <div class="mt-5 text-grey text-center font14">
+                            <span>Dont have an account? <span class='text-brown font-bold click'
+                                                              routerLink='/register'>Register Now</span></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <footer class="mt-auto font11 font-bold text-white">
+        <div class="row" style="color: #222222 !important; margin-top: 10px !important;">
+            <div class="col-lg-6 col-sm-12">
+                <span>(c) 2020. NaijaSub</span>
+            </div>
+            <div class="col-lg-6 col-sm-12 text-right sm-text-left">
+                About <span class="mx-2">|</span> Terms of Use <span class="mx-2">|</span> Privacy Policy<span
+                    class="mx-2">|</span> Created and Manage By <a href="https://tinuda.com">TINUDA INC.</a>
+            </div>
+        </div>
+    </footer>
+</section>

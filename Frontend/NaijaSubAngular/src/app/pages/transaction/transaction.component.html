@@ -1,0 +1,90 @@
+<app-loader *ngIf="loading"></app-loader>
+
+<app-network-error *ngIf="network" (onReloadEvent)="onReload()"></app-network-error>
+
+<ng-container *ngIf="success">
+    <header style="height: 15vh;">
+
+    </header>
+    <section class="pb-5 container">
+
+        <div class="row">
+
+            <div class="col-md-12 col-sm-12">
+                <p class="font-bold font24 text-blue">All Transactions</p>
+
+                <div class="card-table">
+                    <div class="table-responsive mb-5">
+                        <table datatable class="table text-nowrap w-100 table-borderless">
+
+                            <tbody class="font14 text-black">
+                            <tr class="click" *ngFor="let transaction of transactions?.data; let i= index">
+
+                                <td>
+                                    <div>
+                                        <p class="font12 text-light-grey font-bold mb-0">
+                                            Reference</p>
+                                        <p class=" mb-0">{{transaction?.reference }}</p>
+                                    </div>
+                                </td>
+
+                                <td class="text-center">
+                                    <p class="font12 text-light-grey font-bold mb-0">PRICE</p>
+                                    <p class=" mb-0">{{transaction?.amount | currency :'NGN':'symbol-narrow'}}</p>
+                                </td>
+                                <td class="text-center">
+                                    <p class="font12 text-light-grey font-bold mb-0">Description</p>
+                                    <p class=" mb-0">{{transaction?.description}}</p>
+                                </td>
+                                <td>
+                                    <p class="font12 text-light-grey font-bold mb-0">DATE </p>
+                                    <p class=" mb-0">{{transaction?.created_at | date:'medium'}}</p>
+                                </td>
+                                <td>
+                                        <ng-container *ngIf="transaction?.status == 'pending'">
+                                            <div class="badge badge-warning">Pending</div>
+                                        </ng-container>
+                                        <ng-container *ngIf="transaction?.status == 'success'">
+                                            <div class="badge badge-success">Success</div>
+                                        </ng-container>
+                                        <ng-container *ngIf="transaction?.status == 'failed'">
+                                            <div class="badge badge-danger">Failed</div>
+                                        </ng-container>
+                                        <ng-container *ngIf="transaction?.status == 'declined'">
+                                            <div class="badge badge-danger">Declined</div>
+                                        </ng-container>
+                                </td>
+                                <td>
+                                    <div class="btn btn-view text-black"
+                                         routerLink="/dashboard/transaction-details/{{transaction?.reference}}">
+                                        View
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <span *ngIf="transactions?.data.length == 0" class="table text-nowrap w-100 table-borderless">No Transaction Available</span>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-center my-5 list-nav">
+                    <div class="d-flex align-items-center sm-flex-column">
+                        <div class="prev font-bold font20" (click)="onPrevious()">
+                            <i class="fa fa-angle-left"></i>
+                        </div>
+                        <div class="numbers sm-mr-none sm-ml-none">
+                            <span *ngFor="let count of counter"
+                                  [ngClass]="{'active' : count == transactions?.current_page}"
+                                  (click)="loadCurrent(count)" style="cursor: pointer;">{{count}}</span>
+                        </div>
+                        <div class="next  font-bold font20" (click)="onNext()">
+                            <i class="fa fa-angle-right"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+</ng-container>

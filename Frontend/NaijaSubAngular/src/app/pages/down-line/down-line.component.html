@@ -1,0 +1,146 @@
+<app-loader *ngIf="loading"></app-loader>
+
+<app-network-error *ngIf="network" (onReloadEvent)="onReload()"></app-network-error>
+
+<ng-container *ngIf="success">
+    <header style="height: 15vh;">
+
+    </header>
+
+    <section class="pb-5 container">
+
+        <div class="row">
+
+            <div class="col-md-12 col-sm-12">
+                <div style="display: flex; justify-content: space-between; " class="row">
+                    <p class="font-bold font24 text-blue">All Direct Down Line</p>
+
+                </div>
+
+                <div class="card-table">
+                    <div class="table-responsive mb-5">
+                        <ng-container *ngIf="!view_in_direct_down_line">
+                            <table datatable class="table text-nowrap w-100 table-borderless">
+
+                                <tbody class="font14 text-black">
+                                <tr class="click" *ngFor="let downLine of details?.direct_down_line; let i= index">
+
+                                    <td>
+                                        <div>
+                                            <p class="font12 text-light-grey font-bold mb-0">
+                                                Name</p>
+                                            <p class=" mb-0">{{downLine?.name }}</p>
+                                        </div>
+                                    </td>
+
+                                    <td class="text-center">
+                                        <p class="font12 text-light-grey font-bold mb-0">Phone Number</p>
+                                        <p class=" mb-0">{{downLine?.phone}}</p>
+                                    </td>
+                                    <td class="text-center">
+                                        <p class="font12 text-light-grey font-bold mb-0">Email Address</p>
+                                        <p class=" mb-0">{{downLine?.email}}</p>
+                                    </td>
+                                    <td>
+                                        <p class="font12 text-light-grey font-bold mb-0">Level </p>
+                                        <p class=" mb-0">{{downLine?.membership_level.toUpperCase()}}</p>
+                                    </td>
+                                    <td>
+                                        <p class="font12 text-light-grey font-bold mb-0">Total DownLine </p>
+                                        <p class=" mb-0">{{downLine?.referred_user_count | number}}</p>
+                                    </td>
+                                    <td>
+                                        <div class="btn btn-view text-black" *ngIf="downLine?.referred_user_count > 0"
+                                             (click)="onViewInDirectDownLine(downLine?.referral_id, downLine)">
+                                            View DownLine
+                                        </div>
+                                        <div class="btn btn-view text-black" *ngIf="downLine?.referred_user_count == 0">
+                                            No DownLine
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <span *ngIf="details?.direct_down_line?.length == 0"
+                                  class="table text-nowrap w-100 table-borderless">No DownLine Available</span>
+                        </ng-container>
+
+                        <ng-container *ngIf="view_in_direct_down_line">
+                            <div style="display: flex; justify-content: space-between; flex-direction: row">
+
+                                <div class="pro-tip px-3 py-2" style="cursor: pointer; float:right; "
+                                     (click)="onBack()">
+                                        <span class="text-orange"><i class="fa fa-arrow-left"></i> Back
+                                        </span>
+                                </div>
+
+                                <p class="font-bold font24 text-blue">{{activeSelectDownLine?.name}} Down line</p>
+
+                            </div>
+
+                            <ng-container *ngIf="in_direct_down_line_loader">
+                                <app-loader></app-loader>
+                            </ng-container>
+
+                            <table datatable class="table text-nowrap w-100 table-borderless">
+
+                                <tbody class="font14 text-black">
+                                <tr class="click"
+                                    *ngFor="let downLine of in_direct_down_line; let i= index">
+
+                                    <td>
+                                        <div>
+                                            <p class="font12 text-light-grey font-bold mb-0">
+                                                Name</p>
+                                            <p class=" mb-0">{{downLine?.name }}</p>
+                                        </div>
+                                    </td>
+
+                                    <td class="text-center">
+                                        <p class="font12 text-light-grey font-bold mb-0">Phone Number</p>
+                                        <p class=" mb-0">{{downLine?.phone}}</p>
+                                    </td>
+                                    <td class="text-center">
+                                        <p class="font12 text-light-grey font-bold mb-0">Email Address</p>
+                                        <p class=" mb-0">{{downLine?.email}}</p>
+                                    </td>
+                                    <td>
+                                        <p class="font12 text-light-grey font-bold mb-0">Level </p>
+                                        <p class=" mb-0">{{downLine?.membership_level.toUpperCase()}}</p>
+                                    </td>
+                                    <td>
+                                        <p class="font12 text-light-grey font-bold mb-0">Total DownLine </p>
+                                        <p class=" mb-0">{{downLine?.referred_user_count | number}}</p>
+                                    </td>
+                                    <td>
+                                        <div class="btn btn-view text-black"
+                                             *ngIf="downLine?.referred_user_count > 0"
+                                             (click)="onViewInDirectDownLine(downLine?.referral_id, downLine)">
+                                            View DownLine
+                                        </div>
+                                        <div class="btn btn-view text-black"
+                                             *ngIf="downLine?.referred_user_count == 0">
+                                            No DownLine
+                                        </div>
+
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <span *ngIf="in_direct_down_line?.length == 0"
+                                  class="table text-nowrap w-100 table-borderless">No In Direct DownLine Available</span>
+
+                        </ng-container>
+
+
+                    </div>
+                </div>
+
+
+            </div>
+
+        </div>
+
+    </section>
+
+</ng-container>

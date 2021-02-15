@@ -1,0 +1,240 @@
+<app-loader *ngIf="loading"></app-loader>
+
+<app-network-error *ngIf="network" (onReloadEvent)="onReload()"></app-network-error>
+
+<ng-container *ngIf="success">
+    <header style="height: 15vh;">
+
+    </header>
+    <section class="pb-5 container">
+
+        <div class="row">
+
+            <div class="col-lg-4 col-sm-12 my-4">
+
+                <div>
+                    <div class="bg-white box-shadow  px-3"
+                         style="padding-left: 6px;  padding-top:2px; padding-right: 6px; padding-bottom: 1px; border-radius: 9px;">
+                        <div class="mt-4">
+                            <p class="text-light-grey font12 font-bold" style="margin-top: 0; padding-top: 0;">
+                                <b>Current Balance</b>
+                            </p>
+                        </div>
+                        <p class="font30" style="text-align: center;">
+                            {{details?.wallet?.current_balance|currency:'NGN':'symbol-narrow'}}
+                        </p>
+                        <p class="font14">
+                        </p>
+                        <p class="font12">
+                        <b>
+                            PreviousBalance: {{details?.wallet?.previous_balance|currency:'NGN':'symbol-narrow'}
+                        </b></p>
+                    </div>
+                </div>
+
+                <div style="margin-top: 30px;">
+                    <div class="bg-white box-shadow" style="min-height: 30px;  border-radius: 4px;">
+                        <div class="mb-4  flex-wrap"
+                             style="margin-bottom: 0 !important; padding-top: 0.7rem; padding-left: .7rem">
+                            <span class="text-grey">Information</span>
+
+                            <span class="badge bg-green" style="position: absolute; right: 23px;"
+                                  *ngIf="userDetails?.bvn_verify !== '1'" routerLink="/dashboard/settings">
+                            Verify BVN
+                            <i class="fa fa-angle-right"></i> </span>
+                        </div>
+                        <hr>
+                        <div class="text-black font14 " style="padding: 1rem;">
+                            <ul class="information" style="list-style: none;">
+                                <li>
+                                    <button class="btn btn-success" routerLink="/dashboard/funding"
+                                            style="margin-top: 10px; width: 100%; color: #02D670;"><i
+                                            class="fa fa-plus"></i> Fund Wallet
+                                    </button>
+                                </li>
+
+                                <li>
+                                    <i class="fa fa-credit-card"></i>
+                                    Wallet ID
+
+                                    <div class="pro-tip"
+                                         style="padding: 5px; border: solid 1px #02D871; border-radius: 8rem; margin-top: 4px; margin-bottom: 4px;">
+                                    <span class="text-orange font18"
+                                          style="padding-left: 4px;">{{userDetails?.wallet_id.toUpperCase()}}
+                                    </span>
+                                        <i class="fa fa-copy" (click)="copyWalletId(userDetails?.wallet_id)"
+                                           style=" position: absolute;right: 50px; font-size: 17px;"></i>
+                                    </div>
+                                </li>
+
+                                <li>
+                                    <i class="fa fa-credit-card"></i>
+                                    Providus Account Number
+
+                                    <div class="pro-tip"
+                                         style="padding: 5px; border: solid 1px #02D871; border-radius: 8rem; margin-top: 4px; margin-bottom: 4px;">
+                                    <span class="text-orange font18"
+                                          style="padding-left: 4px;">{{providus_account_number.toUpperCase()}}
+                                    </span>
+                                        <i class="fa fa-copy"
+                                           (click)="copyWalletId(providus_account_number,' Providus account copied')"
+                                           style=" position: absolute;right: 50px; font-size: 17px;"></i>
+                                    </div>
+                                </li>
+
+
+                                <li>
+                                    <i class="fa fa-level-up"></i>
+                                    MemberShip Level
+                                    <div class="pro-tip"
+                                         style="display: flex; flex-direction: row;
+                                          border: solid 1px #02D871; border-radius: 8rem;
+                                           margin-top: 4px; margin-bottom: 4px; margin-top:10px;"
+                                    >
+                                    <span class="text-orange"
+                                          style="width: 100%; padding: 8px;">{{userDetails?.membership_level.toUpperCase()}}
+                                    </span>
+                                        <span
+                                                style=" width: 50%; border-bottom-right-radius: inherit; border-top-right-radius: inherit; background-color: #02D670; vertical-align: center; text-align: center; padding-top: 8px; cursor: pointer;"
+                                                (click)="onUpgrade()">
+                                            Upgrade Plan
+                                        </span>
+                                    </div>
+                                </li>
+
+
+                                <li>
+                                    <i class="fa fa-level-up"></i>
+                                    Referral Link
+                                    <div class="pro-tip"
+                                         style="display: flex; flex-direction: row;
+                                          border: solid 1px #02D871; border-radius: 8rem;
+                                           margin-top: 4px; margin-bottom: 4px; margin-top:10px; "
+                                    >
+                                    <span class="text-orange"
+                                          style="width: 100%; padding: 8px; margin-right: 50px; overflow: hidden;">{{referral_link}}
+                                    </span>
+                                        <i class="fa fa-copy"
+                                           (click)="copyWalletId(referral_link,' Referral Link copied')"
+                                           style=" position: absolute;right: 50px; font-size: 17px; text-outline: 10px;margin-top: 8px;"></i>
+                                    </div>
+                                </li>
+
+
+                            </ul>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-sm-12 my-4">
+
+                <div class="bg-white box-shadow  px-3" *ngIf="details?.last_tnx"
+                     style="padding-left: 6px;  padding-top:2px; padding-right: 6px; padding-bottom: 1px; border-radius: 9px; margin-bottom: 10px;"
+                     routerLink="/dashboard/transaction-details/{{details?.last_tnx?.reference}}">
+                    <div class="mt-4">
+                        <p class="text-light-grey font12 font-bold" style="margin-top: 0; padding-top: 0;">
+                            Last Transaction: {{details?.last_tnx?.reference}}</p>
+                    </div>
+                    <p class="font30" style="text-align: center;">
+                        {{details?.last_tnx?.amount|currency:'NGN':'symbol-narrow'}}
+                    </p>
+                    <p class="font14">
+                        Transaction Type:  {{details?.last_tnx?.transaction_type.toUpperCase()}} Service
+                    </p>
+                    <p class="font12">
+                        Date Created: {{details?.last_tnx?.created_at|date:'medium'}}</p>
+                    <div style="text-align: right;">
+                        <span class="badge bg-green" style="font-size:12px; outline: none; cursor: pointer;"
+                              routerLink="/dashboard/transaction-details/{{details?.last_tnx?.refrence}}">View Details</span>
+                    </div>
+                </div>
+
+                <div class="bg-white box-shadow  px-3" style="min-height: 300px; padding-top: 10px;">
+
+                    <div class="mt-4">
+                        <div class="d-flex justify-content-between my-3">
+                            <p class="text-light-grey font12 font-bold" style="margin-top: 0; padding-top: 0;">
+                                NsCoin Bonus
+                            </p>
+                            <div class="font12 text-grey font-light" style="margin-right: 25px;">Date Credited</div>
+                        </div>
+                    </div>
+
+                    <div class="px-4">
+                        <div class="d-flex justify-content-between my-3" *ngFor="let coin of details?.nscoin">
+                            <div>
+                                <p class="text-blue mb-1">{{coin?.ns_coin | number}} <small style="font-size: 12px;">nscoin</small>
+                                </p>
+                                <!--                                <p class="font14 text-grey">Would you be able to bake?</p>-->
+                            </div>
+                            <div class="font12 text-grey font-light">{{coin?.created_at | date :'medium'}}</div>
+                        </div>
+
+                        <div class="d-flex justify-content-between my-3" *ngIf="details?.nscoin.length == 0">
+                            <div>
+                                <p class="text-blue mb-1">No NSCOIN bonus
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-lg-4 col-sm-12">
+
+                <div class="row" style="margin: 0 auto; ">
+                    <ng-container *ngFor="let service of details?.services; let i= index">
+                        <div class="col-lg-6 my-4"
+                             *ngIf="service?.display_name !== 'electricity' && service?.display_name !== 'cable' && service?.display_name !== 'internet_service'"
+                             style="cursor: pointer;  padding: 0; margin-top: 20px !important; padding-right: 10px !important;"
+                             routerLink="/dashboard/purchase/{{service?.display_name}}">
+
+                            <div class="card" style="max-height: 100%; height: 100%; border-radius: 0;">
+
+                                <div style="width: 100%;overflow: hidden;">
+
+                                    <img src="{{external_url + service?.images_url}}"
+                                         onerror="this.src='../assets/img/airtime01.png'" style="width: 100%;">
+
+                                </div>
+
+
+                                <div style="text-align: center;font-weight: bold;font-size: 15px;   margin-top: 20px;margin-bottom: 20px;">
+                                    <span class="text-center"> {{service?.name}}</span>
+                                </div>
+
+                            </div>
+
+                        </div>
+                    </ng-container>
+
+                    <div class="col-lg-6 my-4"
+                         style="cursor: pointer;  padding: 0; margin-top: 20px !important; padding-right: 10px !important;"
+                         routerLink="/dashboard/purchase/bill_payment">
+
+                        <div class="card" style="max-height: 100%; height: 100%; border-radius: 0;">
+
+                            <div style="width: 100%;overflow: hidden;">
+
+                                <img src="{{external_url}}bill01.png"
+                                     onerror="this.src='../assets/img/airtime01.png'" style="width: 100%;">
+
+                            </div>
+
+
+                            <div style="text-align: center;font-weight: bold;font-size: 15px;   margin-top: 20px;margin-bottom: 20px;">
+                                <span class="text-center"> Bill Payment</span>
+                            </div>
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+</ng-container>
