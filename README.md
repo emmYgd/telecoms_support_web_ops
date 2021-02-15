@@ -1,2 +1,2 @@
 # Telecoms Project
-Laravel Backend and Angular frontend For Telecommunication Company to buy and data, make utility bill payments, buy and sell airtime and support mascellaneous operations. Thiswas achieved by interacting with a lot of APIs.
+Laravel Backend and Angular frontend to support the operations of a Telecommunication Company. The operations include: buy and sell internet data, make utility bill payments, buy and sell airtime and support for other allied operations. This was achieved by interacting with a lot of external APIs using the GuzzleHttp library. Other tools include: the amazing Eloquent ORM for database Models, OOP features for better organizations.
