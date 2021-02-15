@@ -1,0 +1,77 @@
+<div class="my-4 d-flex justify-content-between align-items-center flex-wrap">
+    <div class="font24 font-bold my-2">
+        <span class="mr-2 text-grey my-2">👋 Current Balance:</span>
+        <span class="text-orange">{{details?.wallet?.current_balance | currency :'NGN' :'symbol-narrow'}}
+        </span>
+    </div>
+    <div class="pro-tip px-3 py-2" style="cursor: pointer; " (click)="onBack()">
+        <span class="text-orange">
+            <i class="fa fa-arrow-left"></i> Back
+        </span>
+    </div>
+</div>
+
+
+<app-loader *ngIf="loading"></app-loader>
+
+<app-network-error *ngIf="network" (onReloadEvent)="onReload()"></app-network-error>
+
+<ng-container *ngIf="success">
+    <div class="card p-4 my-5">
+        <p class="text-grey font-bold">Funding History</p>
+        <div class="table-responsive">
+            <table class="table text-nowrap">
+                <thead>
+                <tr>
+                    <th>Delivery Date</th>
+                    <th>Payment Reference</th>
+                    <th>Amount</th>
+                    <th>Date Funded</th>
+                    <th>Status</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <tr *ngFor="let fund of details?.fund?.data; let i= index">
+                    <td>{{fund?.reference}}</td>
+                    <td>{{fund?.payment_reference || '--'}}</td>
+                    <td>{{fund?.amount | currency :'NGN' : 'symbol-narrow'}}</td>
+                    <td>{{fund?.created_at | date: 'medium'}}</td>
+                    <td>
+                        <span class="badge" [ngClass]="
+                        {
+                        'badge-success': fund?.status == 'success',
+                        'badge-warning' : fund?.status == 'pending',
+                        'badge-danger': fund?.status == 'failed' || fund?.status == 'declined'
+                        }
+">
+                            {{fund?.status}}
+                        </span>
+                    </td>
+                    <td class="font15 text-orange click" (click)="onView(i)">View details <i
+                            class="fa fa-angle-right"></i></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <!--        <div class="my-4 text-orange click">Show all <i class="fa fa-angle-right"></i></div>-->
+
+        <ng-container *ngIf='details?.fund?.data.length == 0'>
+            <p class="text-boro-primary  empty-state" style="color: #222222 !Important; text-align: center;">No Funding
+                History</p>
+        </ng-container>
+
+
+        <div class="page-buttons">
+
+        <span class="btn btn-default-borome text-white c_p mr-2" *ngFor='let count of counter'
+              [ngClass]='{"bg-boro-primary" : details?.fund?.current_page == count }'
+              (click)='fetchFunding(count)'>
+            {{count}}
+        </span>
+            <span class="btn text-boro-black c_p odd next-btn" (click)='next()'>NEXT
+        </span>
+        </div>
+    </div>
+</ng-container>

@@ -1,0 +1,48 @@
+<app-loader *ngIf="loading"></app-loader>
+
+<app-network-error *ngIf="network" (onReloadEvent)="onReload()"></app-network-error>
+
+<ng-container *ngIf="success">
+    <header style="height: 15vh;">
+
+    </header>
+
+    <section class="pb-5 container">
+        <div class="row" style="margin: 0 auto;">
+            <div class="row justify-content-center" style="margin: 0 auto;">
+                <div class="col-lg-12 card-wrapper">
+                    <!-- Alerts -->
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="mb-0">Notifications</h3>
+                        </div>
+                        <div class="card-body">
+                            <div class="alert alert-info alert-dismissible fade show" role="alert"
+                                 *ngIf="notification?.data.length == 0">
+                                <span class="alert-icon"><i class="ni ni-like-2"></i></span>
+                                <span class="alert-text"> No notification available</span>
+                            </div>
+
+                            <div class="alert alert-info alert-dismissible fade show" role="alert"
+                                 *ngFor="let notify of notification?.data">
+                                <span class="alert-icon"><i class="ni ni-like-2"></i></span>
+                                <span class="alert-text"> {{notify?.message}}</span>
+                            </div>
+
+
+                            <div style="display: flex; flex-direction: row; justify-content: space-between;">
+                                <button class="btn btn-default"
+                                        (click)="page = notification?.current_page -1; fetchAllNotification()">Previous
+                                </button>
+                                <button class="btn btn-success" style="color: #02D670;"
+                                        (click)="page = notification?.current_page+ 1; fetchAllNotification()">Next
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+</ng-container>

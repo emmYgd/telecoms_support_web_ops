@@ -1,0 +1,243 @@
+<app-loader *ngIf="loading"></app-loader>
+
+<app-network-error *ngIf="network" (onReloadEvent)="onReload()"></app-network-error>
+
+<ng-container *ngIf="success">
+    <header style="height: 15vh;">
+
+    </header>
+    <section class="pb-5 container">
+
+        <div class="row">
+
+            <div class="col-md-4 col-sm-12" style="margin-bottom: 20px;">
+
+                <div class="card">
+
+                    <div class="card-body card_amount_holder">
+
+                        <div class="card-amount card-amount_data font35">
+                            <span>{{profile?.wallet?.current_balance | currency : 'NGN' : 'symbol-narrow'}}</span>
+                        </div>
+                        <div class="card_amount_holder_footer">
+                            <p><small>previous
+                                balance: </small> {{profile?.wallet?.previous_balance | currency : 'NGN' : 'symbol-narrow'}}
+                            </p>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="row" style="margin-top: 20px; flex-wrap: nowrap;">
+                    <div class="col-md-6 col-sm-5 col-xs-6" style="padding-right: 10px; cursor: pointer;"
+                         data-toggle="modal" data-target="#makeWithdrawal">
+                        <div class="card" style="height: 45px; padding: 5px;">
+
+                            <span class="withdrew">
+                                <i class="fa fa-minus center_icon"></i>
+                            </span>
+
+                            <span class="title_card_amount">
+                                Withdraw
+                            </span>
+
+                        </div>
+                    </div>
+
+                    <div class="col-md-6 col-sm-5" style="padding-left: 10px;">
+                        <div class="card" style="height: 45px; padding: 5px;" routerLink="/dashboard/funding">
+<span class="fund">
+            <i class="fa fa-plus center_icon"></i>
+</span>
+                            <span class="title_card_amount">Fund</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-md-7 col-sm-12">
+                <p class="font-bold font24 text-blue">Transaction List</p>
+
+                <span class="view_more badge badge-warning" routerLink="/dashboard/transaction">View More</span>
+
+                <div class="card-table">
+                    <div class="table-responsive mb-5">
+                        <table datatable class="table text-nowrap w-100 table-borderless">
+
+                            <tbody class="font14 text-black">
+                            <tr class="click" *ngFor="let fund of profile?.recent_transaction">
+                                <td>
+                                    <div>
+                                        <p class="font12 text-light-grey font-bold mb-0">
+                                            Reference</p>
+                                        <p class=" mb-0">{{fund?.reference }}</p>
+                                    </div>
+                                </td>
+                                <td>
+                                    <p class="font12 text-light-grey font-bold mb-0">Payment Reference</p>
+                                    <p class=" mb-0">{{fund?.payment_reference || '--'}}</p>
+                                </td>
+                                <td class="text-center">
+                                    <p class="font12 text-light-grey font-bold mb-0">PRICE</p>
+                                    <p class=" mb-0">{{fund?.amount | currency :'NGN':'symbol-narrow'}}</p>
+                                </td>
+                                <td class="text-center">
+                                    <p class="font12 text-light-grey font-bold mb-0">Description</p>
+                                    <p class=" mb-0">{{fund?.description}}</p>
+                                </td>
+                                <td>
+                                    <p class="font12 text-light-grey font-bold mb-0">DATE </p>
+                                    <p class=" mb-0">{{fund?.created_at | date:'medium'}}</p>
+                                </td>
+                                <td>
+                                    <ng-container *ngIf="fund?.status == 'pending'">
+                                        <div class="badge badge-warning">Pending</div>
+                                    </ng-container>
+                                    <ng-container *ngIf="fund?.status == 'success'">
+                                        <div class="badge badge-success">Success</div>
+                                    </ng-container>
+                                    <ng-container *ngIf="fund?.status == 'failed'">
+                                        <div class="badge badge-danger">Failed</div>
+                                    </ng-container>
+                                    <ng-container *ngIf="fund?.status == 'declined'">
+                                        <div class="badge badge-danger">Declined</div>
+                                    </ng-container>
+                                </td>
+                                <td>
+                                    <div class="btn btn-view text-black" routerLink="/transaction/{{fund?.reference}}">
+                                        View
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                        <span *ngIf="profile?.recent_transaction.length == 0">No Transaction</span>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </section>
+</ng-container>
+
+<div class="modal fade" id="makeWithdrawal" tabindex="-1" role="dialog"
+     aria-labelledby="makeWithdrawalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content py-5 px-4">
+            <div class="text-center">
+                <img src="assets/img/logoNs.png" alt="" style="width: 50%;"/>
+            </div>
+            <div class="bg-grey border-radius w-100 text-center py-3 font18">
+                Make Withdrawal
+            </div>
+
+
+            <ng-container *ngIf="!confirmPreview">
+                <ng-container *ngIf="profile?.account_information == 'yes'">
+                    <div class="my-2">
+                        <div class="alert alert-success">
+                            Withdrawal charges would be deducted
+                        </div>
+                    </div>
+                    <div class="my-2">
+                        <label class="text-grey">Enter Amount</label>
+                        <input type="text" class="form-control" placeholder="Enter Amount to withdraw"
+                               [(ngModel)]="withdrawQuery.amount"/>
+                    </div>
+                    <div class="text-right mt-3">
+                        <ng-container *ngIf="profile?.account_information == 'yes'">
+                            <button class="btn common-btn text-white bg-blue font12" [disabled]="withdrawLoader"
+                                    (click)="confirmTransfer()">
+                                Confirm Transaction
+                                <i class="fa fa-spin fa-spinner" *ngIf="withdrawLoader"></i>
+                            </button>
+                        </ng-container>
+                        <button type="button" class="close close_icon" #closeWithdraw data-dismiss="modal"
+                                aria-hidden="true">
+                            ×
+                        </button>
+                    </div>
+                </ng-container>
+                <ng-container *ngIf="profile?.account_information == 'no'">
+
+                    <div class="my-2">
+                        <div class="alert alert-success">
+                            Pending KYC Verification . Kindly <a href="/dashboard/settings">Proceed</a> to KYC
+                            verification
+                        </div>
+                    </div>
+
+                </ng-container>
+            </ng-container>
+
+            <ng-container *ngIf="confirmPreview">
+
+                <p class="subtle">Amount to Withdraw </p>
+                <p class="main-text text-uppercase">
+                    {{confirmData?.amount | currency :'NGN':'symbol-narrow'}}
+                </p>
+                <div class="my-2">
+                    <div class="alert alert-success">
+                        Amount would be transfer to the account below:
+                    </div>
+                </div>
+                <p class="subtle">Account Name </p>
+                <p class="main-text text-uppercase">
+                    {{confirmData?.account_name}}
+                </p>
+
+
+                <p class="subtle">Account Number</p>
+                <p class="main-text text-uppercase">
+                    {{confirmData?.account_number}}
+                </p>
+
+                <p class="subtle">Bank Name</p>
+                <p class="main-text text-uppercase">
+                    {{confirmData?.bank_name}}
+                </p>
+
+                <p class="subtle">Charges</p>
+                <p class="main-text text-uppercase">
+                    {{profile?.withdraw_charges}}
+                </p>
+
+                <div class="row">
+
+                    <div class="d-flex sm-flex-wrap fundings"
+                         style="margin-left: 10px; margin-bottom: 15px;">
+                        <input type="number" class="form-control my-2" placeholder="Enter Transaction Pin"
+                               (change)="onChangePin($event)"/>
+                    </div>
+
+                </div>
+
+                <div class="formg">
+                    <div style="width: 100%;">
+                        <button class="btn btn-dark buy"
+                                (click)='onRequestWithdrawal()' [disabled]="withdrawLoader">
+                            Confirm
+                            <i class="fa fa-spin fa-spinner" *ngIf="withdrawLoader"></i>
+                        </button>
+                        <button type="button" class="close close_icon" #closeWithdraw data-dismiss="modal"
+                                aria-hidden="true">
+                            ×
+                        </button>
+                    </div>
+                    <div class="acc">
+                            <span> Not correct?
+                                <a href="#" (click)='confirmPreview = false'> Cancel</a>
+                            </span>
+                    </div>
+
+                </div>
+
+            </ng-container>
+
+        </div>
+    </div>
+</div>

@@ -1,0 +1,598 @@
+<ng-container *ngIf="!selectedMethod[1]?.transaction_pin">
+
+    <div class="card" style="min-height: 300px; text-align: center;">
+
+        <div class="center-a" style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%)">
+            <p>No Transaction Pin Set</p>
+            <a class="btn btn-dark" href="/dashboard/create-transaction-pin">Create Pin</a>
+
+        </div>
+    </div>
+
+</ng-container>
+<ng-container *ngIf="selectedMethod[1]?.transaction_pin">
+
+    <ng-container *ngIf="!preview">
+        <ng-container *ngIf="selectedMethod[0]?.name == 'manuel'">
+
+            <div class="col-lg-8 center-div">
+
+                <mat-card>
+
+                    <mat-card-header>
+                        <p>Fund Wallet</p>
+                    </mat-card-header>
+
+                    <mat-card-content>
+
+                        <div class="alert alert-info">
+                            <p>- Make payment directly into any of our bank account of your choice using any transfer
+                                method
+                                which include Bank deposit, USSD, Mobile and Internet banking etc.
+                            </p>
+                            <p>-Your wallet will only
+                                be
+                                funded after we have confirmed your payment in our account. Please note that this
+                                process is
+                                manual and confirmation of payment is withing 30mins to 2hrs with no service charge or
+                                extra
+                                cost.
+                            </p>
+                            <p>
+                                -Use Wallet id as description for payment.
+                            </p>
+                        </div>
+
+                        <div>
+
+                            <form [formGroup]="fundWallet" (ngSubmit)="manuelFunding()">
+
+                                <div class="d-flex sm-flex-wrap fundings">
+                                    <input type="number" class="form-control my-2" placeholder="Enter Amount"
+                                           formControlName="amount"/>
+                                </div>
+
+                                <div class="d-flex sm-flex-wrap fundings" style="margin-top: 15px;">
+                                    <select class="form-control" formControlName="bank_id">
+                                        <option value="">Select bank to pay to</option>
+                                        <option *ngFor="let bank of selectedMethod[1]?.available_banks; let i= index"
+                                                value="{{i}}">{{bank?.bank_name}}</option>
+                                    </select>
+                                </div>
+
+
+                                <div class="d-flex sm-flex-wrap fundings" style="margin-top: 15px;">
+                                    <input type="text" class="form-control my-2" placeholder="Sender Name"
+                                           formControlName="sender_name"/>
+                                </div>
+
+
+                                <div class="d-flex sm-flex-wrap fundings" style="margin-top: 15px;">
+                                    <input type="number" class="form-control my-2" placeholder="Sender Account Number"
+                                           formControlName="sender_account_number"/>
+                                </div>
+
+                                <div class="d-flex sm-flex-wrap fundings" style="margin-top: 30px;">
+                                    <button class="btn btn-dark btn-submit">Submit</button>
+                                </div>
+
+
+                            </form>
+
+
+                        </div>
+
+                    </mat-card-content>
+
+                </mat-card>
+            </div>
+
+        </ng-container>
+        <ng-container *ngIf="selectedMethod[0]?.name == 'flutter'">
+
+            <div class="col-lg-8 center-div">
+
+                <mat-card>
+
+                    <mat-card-header>
+                        <p>Fund Wallet</p>
+                    </mat-card-header>
+
+                    <mat-card-content>
+
+                        <div class="alert alert-info">
+                            <p>
+                                - Make payment using your card. You will be required to securely fill in your card
+                                information. Please follow all instructions carefully and your wallet will be funded
+                                immediately and automatically once completed successfully.
+                            </p>
+                        </div>
+
+                        <div>
+
+                            <form [formGroup]="fundWallet" (ngSubmit)="flutterFunding()">
+
+                                <div class="d-flex sm-flex-wrap fundings">
+                                    <input type="number" class="form-control my-2" placeholder="Enter Amount"
+                                           formControlName="amount"/>
+                                </div>
+
+                                <div class="d-flex sm-flex-wrap fundings" style="margin-top: 30px;">
+                                    <button class="btn btn-dark btn-submit">Submit</button>
+                                </div>
+
+
+                            </form>
+
+
+                        </div>
+
+                    </mat-card-content>
+
+                </mat-card>
+
+            </div>
+        </ng-container>
+        <ng-container *ngIf="selectedMethod[0]?.name == 'cards'">
+            <div class="col-lg-8 center-div">
+
+                <mat-card>
+
+                    <mat-card-header>
+                        <p>Fund Wallet</p>
+                    </mat-card-header>
+
+                    <mat-card-content>
+                        <div class="alert alert-info">
+                            <p>
+                                - Make payment using your card. You will be required to securely fill in your card
+                                information. Please follow all instructions carefully and your wallet will be funded
+                                immediately and automatically once completed successfully.
+                            </p>
+                        </div>
+
+                        <div>
+                            <ng-container *ngIf="selectedMethod[1]?.cards.length == 0">
+                                <p>No Card Available</p>
+                            </ng-container>
+                            <ng-container *ngIf="selectedMethod[1]?.cards.length > 0">
+                                <form [formGroup]="fundWallet" (ngSubmit)="cardFunding()">
+
+                                    <div class="d-flex sm-flex-wrap fundings">
+                                        <input type="number" class="form-control my-2" placeholder="Enter Amount"
+                                               formControlName="amount"/>
+                                    </div>
+
+
+                                    <div class="card p-2 box-card"
+                                         style="min-height: 30px; border-radius: 0;margin-top: 10px; cursor: pointer;"
+                                         *ngFor="let card of  selectedMethod[1]?.cards; let i= index"
+                                         (click)="onSelectCard(i)">
+                                        <div class="mb-4 "
+                                             style="margin-bottom: 0 !important;">
+                                            <div style="display: flex; flex-direction: row; margin-right: 5px;  align-content: center;">
+                                                <div style="    margin-top: 15px;">
+                                                    <i class="fa fa-circle-o" style="color: #222222;"
+                                                       *ngIf="selectedCard !== i "></i>
+
+                                                    <i class="fa fa-circle" style="color: #02d871;"
+                                                       *ngIf="selectedCard == i "></i>
+                                                </div>
+                                                <div style="margin-left: 10px;">
+                                                <span style="display: block;">xxxx xxxx xxxx <span
+                                                        style="font-weight: bold;">{{card?.last_4_digit}}</span></span>
+                                                    <span style="font-weight: bold; display: block;">{{card?.account_name}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="d-flex sm-flex-wrap fundings" style="margin-top: 30px;">
+                                        <button class="btn btn-dark btn-submit">Submit</button>
+                                    </div>
+
+
+                                </form>
+                            </ng-container>
+                        </div>
+
+                    </mat-card-content>
+
+                </mat-card>
+
+            </div>
+        </ng-container>
+        <ng-container *ngIf="selectedMethod[0]?.name == 'providus'">
+
+            <div class="col-lg-8 center-div">
+
+                <mat-card>
+
+                    <mat-card-header>
+                        <p>Fund Wallet</p>
+                    </mat-card-header>
+
+                    <mat-card-content>
+
+                        <div class="alert alert-info">
+                            <p>Payment via your Providus dedicated Account Number (Recommended).</p>
+                            <p>Fund your wallet instantly by paying to your dedicated account number assigned to
+                                you.</p>
+                            <p>How to pay</p>
+                            <ul>
+                                <li>Copy your account number, login to your mobile/internet/ussd banking select PROVIDUS
+                                    Bank and input your dedicated account number on this platform and transfer any
+                                    amount to it. Your wallet will be automatically funded, this process is done
+                                    instantly. You will be charged {{50 | currency:'NGN':'symbol-narrow'}}</li>
+                                <li>
+                                    Please note that this account number is only compatible with this platform, any
+                                    payment made to your virtual account number will reflect in your Naija Sub Wallet on confirmation or after next login.
+                                </li>
+                                <li>There is no form to fill, copy your account and pay instantly.</li>
+                            </ul>
+
+                            <p>
+                                Make Payment to
+                            </p>
+                            <ul style="list-style: none; font-weight: bold; font-size: 15px;">
+                                <li>Bank Name : {{selectedMethod[0]?.providus_bank?.bank_name}}</li>
+                                <li>Account Name : {{selectedMethod[0]?.providus_bank?.account_name}}</li>
+                                <li>Account Number : {{selectedMethod[0]?.providus_bank?.account_number}}</li>
+                            </ul>
+                        </div>
+                        <div>
+                            <b>After payment, enter the amount you paid and click the button below to confirm</b><br/>
+
+                            <div>
+                                <!--<form [formGroup]="fundWallet">-->
+                                    <!--<input type="number" class="form-control my-2" placeholder="Enter Amount"
+                                               formControlName="amount"/><br/>-->
+
+                                    <button class="btn btn-primary bg-brown" type="submit" (click)="providusFunding()" [disabled]="loading">
+                                        Confirm Funding
+                                        <i class="fa fa-spin fa-spinner" *ngIf="loading"></i>
+                                    </button>
+                                <!--</form>-->
+                            </div>
+                        </div>
+
+                        <div>
+
+                            <!--                            <form [formGroup]="fundWallet" (ngSubmit)="providusFunding()">-->
+
+                            <!--                                <div class="d-flex sm-flex-wrap fundings">-->
+                            <!--                                    <input type="number" class="form-control my-2" placeholder="Enter Amount"-->
+                            <!--                                           formControlName="amount"/>-->
+                            <!--                                </div>-->
+
+
+                            <!--                                <div class="d-flex sm-flex-wrap fundings" style="margin-top: 30px;">-->
+                            <!--                                    <button class="btn btn-dark btn-submit">Submit</button>-->
+                            <!--                                </div>-->
+
+
+                            <!--                            </form>-->
+
+
+                        </div>
+
+                    </mat-card-content>
+
+                </mat-card>
+
+            </div>
+        </ng-container>
+        <ng-container *ngIf="selectedMethod[0]?.name == 'pay_airtime'">
+
+            <div class="col-lg-8 center-div">
+
+                <mat-card>
+
+                    <mat-card-header>
+                        <p>Fund Wallet</p>
+                    </mat-card-header>
+
+                    <mat-card-content>
+
+                        <div class="alert alert-info">
+                            <p>You can fund your using airtime.</p>
+                            <p>We will retain {{selectedMethod[0]?.charges}}% of the airtime value you transfer to us
+                                and
+                                your wallet will be funded
+                                with 85% value of the airtime. For example, if you transferred 1000 airtime worth to us,
+                                your Naijasub wallet will be funded with 850. The number you will send the airtime to
+                                will be shown to you. After you have successfully transferred the airtime to us, it
+                                could
+                                take a few seconds to 15mins to verify your request and confirm payment. Please note
+                                that this process is done manually.</p>
+                            <p>Wallet id should be used as description when sending airtime</p>
+
+                            <ul style="list-style: none; font-weight: bold; font-size: 15px;">
+                                <li *ngFor="let phone of selectedMethod[0]?.phone_number">{{phone?.name}}
+                                    : {{phone?.phone}}</li>
+                            </ul>
+                        </div>
+
+                        <div>
+
+                            <form [formGroup]="fundWallet" (ngSubmit)="airtimeFunding()">
+
+                                <div class="d-flex sm-flex-wrap fundings" style="margin-top: 15px;">
+                                    <select class="form-control" formControlName="airtime_mode"
+                                            (change)="onChangeAirtimePaymentMethod($event)">
+                                        <option value="">Select Airtime Top Method</option>
+                                        <option value="share_n_sell">Share-N-Sell</option>
+                                        <option value="pin">Airtime Pin</option>
+                                    </select>
+                                </div>
+
+
+                                <ng-container *ngIf="selecteAirtimeFundingMethod == 'share_n_sell'">
+                                    <div class="d-flex sm-flex-wrap fundings" style="margin-top: 15px;">
+                                        <select class="form-control" formControlName="network">
+                                            <option value="">Select Network</option>
+                                            <option *ngFor="let network of selectedMethod[0]?.phone_number; let i= index"
+                                                    value="{{network?.name}}">{{network?.name}} ({{network?.phone}})
+                                            </option>
+                                        </select>
+                                    </div>
+
+                                    <div class="d-flex sm-flex-wrap fundings" style="margin-top: 15px;">
+                                        <input type="number" class="form-control my-2" placeholder="Enter Amount"
+                                               formControlName="amount"/>
+                                    </div>
+
+
+                                    <div class="d-flex sm-flex-wrap fundings">
+                                        <input type="number" class="form-control my-2" placeholder="Sender Phone Number"
+                                               formControlName="phone_number"/>
+                                    </div>
+
+                                </ng-container>
+
+
+                                <ng-container *ngIf="selecteAirtimeFundingMethod == 'pin'">
+                                    <div class="d-flex sm-flex-wrap fundings" style="margin-top: 15px;">
+                                        <select class="form-control" formControlName="network">
+                                            <option value="">Select Network</option>
+                                            <option *ngFor="let network of selectedMethod[0]?.phone_number; let i= index"
+                                                    value="{{network?.name}}">{{network?.name}} ({{network?.phone}})
+                                            </option>
+                                        </select>
+                                    </div>
+
+                                    <div class="d-flex sm-flex-wrap fundings" style="margin-top: 15px;">
+                                        <input type="number" class="form-control my-2" placeholder="Enter Amount"
+                                               formControlName="amount"/>
+                                    </div>
+
+
+                                    <div class="d-flex sm-flex-wrap fundings">
+                                        <input type="number" class="form-control my-2" placeholder="Sender Phone Number"
+                                               formControlName="phone_number"/>
+                                    </div>
+
+                                    <div class="d-flex sm-flex-wrap fundings">
+                                        <textarea class="form-control my-2" placeholder="Enter Pin"
+                                                  formControlName="airtime_pins"></textarea>
+                                    </div>
+                                    <small style="color: red;">Note: For multiple pin seperate by comma (,)</small>
+
+                                </ng-container>
+
+
+                                <div class="d-flex sm-flex-wrap fundings" style="margin-top: 30px;">
+                                    <button class="btn btn-dark btn-submit">Submit</button>
+                                </div>
+
+
+                            </form>
+
+
+                        </div>
+
+                    </mat-card-content>
+
+                </mat-card>
+
+            </div>
+        </ng-container>
+        <ng-container *ngIf="selectedMethod[0]?.name == 'transfer'">
+            <div class="col-lg-8 center-div">
+
+                <mat-card>
+
+                    <mat-card-header>
+                        <p>Fund Wallet</p>
+                    </mat-card-header>
+
+                    <mat-card-content>
+
+                        <div class="alert alert-info">
+                            <p>Transfer to another NaijaSub Wallet</p>
+
+                        </div>
+
+                        <div>
+
+                            <form [formGroup]="fundWallet" (ngSubmit)="walletTransfer()">
+                                <div class="d-flex sm-flex-wrap fundings" style="margin-top: 15px;">
+                                    <input type="number" class="form-control my-2" placeholder="Enter Amount"
+                                           formControlName="amount"/>
+                                </div>
+
+
+                                <div class="d-flex sm-flex-wrap fundings">
+                                    <input type="number" class="form-control my-2" placeholder="Wallet ID"
+                                           formControlName="wallet_id"/>
+                                </div>
+                                <small style="color: red;">Note: Receiver's wallet ID (,)</small>
+
+
+                                <div class="d-flex sm-flex-wrap fundings" style="margin-top: 30px;">
+                                    <button class="btn btn-dark btn-submit" [disabled]="verifyWalletLoader">
+                                        Submit
+                                        <i class="fa fa-spin fa-spinner" *ngIf="verifyWalletLoader"></i>
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+
+                    </mat-card-content>
+
+                </mat-card>
+
+            </div>
+
+        </ng-container>
+    </ng-container>
+
+    <ng-container *ngIf="preview">
+        <div class="card">
+            <div style="padding: 20px" class="succes-rep">
+                <p class="subtle">Funding Type </p>
+                <p class="main-text">
+                    <ng-container *ngIf="selectedMethod[0]?.name !== 'pay_airtime'">
+                        {{selectedMethod[0]?.name.toUpperCase()}} {{(selectedMethod[0]?.name == 'flutter') ? 'Wave' : ''}}
+                    </ng-container>
+                    <ng-container *ngIf="selectedMethod[0]?.name == 'pay_airtime'">
+                        Airtime Payment
+                    </ng-container>
+                </p>
+
+                <ng-container
+                        *ngIf="selectedMethod[0]?.name == 'manuel'">
+                    <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    <span class="alert-text">
+                        Note:
+                       Use your wallet id as payee id
+                    </span>
+                    </div>
+
+                    <p class="subtle">Sender Name </p>
+                    <p class="main-text text-uppercase">{{fundWallet.get('sender_name').value}}</p>
+
+                    <p class="subtle">Sender Account Number</p>
+                    <p class="main-text text-uppercase">
+                        {{fundWallet.get('sender_account_number').value}}
+                    </p>
+                    <hr>
+
+                </ng-container>
+
+                <ng-container
+                        *ngIf="selectedMethod[0]?.name == 'transfer'">
+
+                    <p class="subtle">Receiver's Name </p>
+                    <p class="main-text text-uppercase">{{verifyWalletDetails?.name}}</p>
+
+                    <p class="subtle">Receiver's Phone Number</p>
+                    <p class="main-text text-uppercase">
+                        {{verifyWalletDetails?.phone}}
+                    </p>
+                    <hr>
+
+                </ng-container>
+
+                <ng-container
+                        *ngIf="selectedMethod[0]?.name == 'pay_airtime'">
+
+                    <p class="subtle">Airtime Method </p>
+                    <p class="main-text text-uppercase">{{(fundWallet.get('airtime_mode').value == 'share_n_sell') ? 'Share-N-Sell' : 'Airtime Pin'}}</p>
+
+                    <p class="subtle">Sender Phone Number </p>
+                    <p class="main-text text-uppercase">{{fundWallet.get('phone_number').value}}</p>
+
+                    <ng-container *ngIf="fundWallet.get('airtime_mode').value == 'pin'">
+                        <p class="subtle">Airtime Pin</p>
+                        <p class="main-text text-uppercase">
+                            {{fundWallet.get('airtime_pins').value}}
+                        </p>
+                    </ng-container>
+
+                </ng-container>
+
+                <ng-container *ngIf="selectedMethod[0]?.name == 'manuel'">
+                    <p class="subtle">Pay to </p>
+                    <p class="main-text text-uppercase">{{selectedMethod[1]['available_banks'][fundWallet.get('bank_id').value]?.bank_name}}</p>
+
+                    <p class="subtle">Account Number </p>
+                    <p class="main-text text-uppercase">{{selectedMethod[1]['available_banks'][fundWallet.get('bank_id').value]?.account_name}}</p>
+
+                    <p class="subtle">Account Number </p>
+                    <p class="main-text text-uppercase">
+                        {{selectedMethod[1]['available_banks'][fundWallet.get('bank_id').value]?.account_number}}
+                    </p>
+                </ng-container>
+
+                <ng-container *ngIf="selectedMethod[0]?.name == 'cards'">
+                    <p class="subtle">Card Name </p>
+                    <p class="main-text text-uppercase">{{selectedMethod[1]['cards'][selectedCard]?.account_name}}</p>
+
+                    <p class="subtle">Card Number</p>
+                    <p class="main-text text-uppercase">
+                        **** **** **** {{selectedMethod[1]['cards'][selectedCard]?.last_4_digit}}
+                    </p>
+
+                    <p class="subtle">Expiry Date </p>
+                    <p class="main-text text-uppercase">
+                        {{selectedMethod[1]['cards'][selectedCard]?.expiry_date}}
+                    </p>
+                </ng-container>
+
+                <div class="row">
+
+                    <div class="col-3">
+                        <p class="subtle">Amount</p>
+                        <p class="main-text">
+                            &#x20A6;{{fundWallet.get('amount').value - charges | number}}</p>
+                        <br>
+                    </div>
+
+                    <div class="col-5">
+                        <p class="subtle">Service Charge</p>
+                        <p class="main-text">&#x20A6;{{charges | number }}</p>
+                        <br>
+                    </div>
+
+                    <div class="col-4">
+                        <p class="subtle">Total</p>
+                        <p class="main-text">&#x20A6;{{fundWallet.get('amount').value | number}}</p>
+                        <br>
+                    </div>
+
+                </div>
+
+                <div class="row">
+
+                    <div class="d-flex sm-flex-wrap fundings" style="margin-left: 10px; margin-bottom: 15px;">
+                        <input type="number" class="form-control my-2" placeholder="Enter Transaction Pin"
+                               (change)="onChangePin($event)"/>
+                    </div>
+
+                </div>
+
+                <div class="formg">
+                    <div style="width: 100%;">
+                        <button class="btn btn-dark buy"
+                                (click)='onConfirm()' [disabled]="loading">
+                            Confirm
+                            <i class="fa fa-spin fa-spinner" *ngIf="loading"></i>
+                        </button>
+
+                    </div>
+                    <div class="acc">
+                            <span> Not correct?
+                                <a href="#" (click)='preview = false'> Cancel</a>
+                            </span>
+                    </div>
+
+                </div>
+
+
+            </div>
+
+        </div>
+    </ng-container>
+</ng-container>

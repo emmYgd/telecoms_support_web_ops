@@ -1,0 +1,1009 @@
+<app-loader *ngIf="loading"></app-loader>
+
+<app-network-error *ngIf="network" (onReloadEvent)="onReload()"></app-network-error>
+
+<ng-container *ngIf="success">
+
+    <header style="height: 15vh;">
+
+    </header>
+
+    <section class="pb-5 container">
+        <div class="row">
+
+            <div class="pro-tip px-3 py-2" style="cursor: pointer; float:right; " (click)="onBack()">
+                <span class="text-orange">
+                <i class="fa fa-arrow-left"></i> Back
+                </span>
+            </div>
+
+            <ng-container *ngIf="service !== 'bill_payment'">
+                <ng-container *ngIf="!preview">
+                    <ng-container
+                            *ngIf="details?.services?.display_name.toLowerCase() !== 'e_pin' && details?.services?.display_name.toLowerCase() !== 'coin'">
+                        <div class="col-lg-5 my-4 center-div" style="    margin: 0 auto;">
+                            <div class="card shadow" style="max-height: 100%; height: 100%; border-radius: 0; ">
+
+                                <div style="padding: 10px; padding-bottom: 0 !important;"
+                                     *ngIf="details?.services?.display_name.toLowerCase() !== 'airtime'">
+                                    <h6>
+                                        <ng-container
+                                                *ngIf="details?.services?.display_name.toLowerCase() !== 'coin' && details?.services?.display_name.toLowerCase() !== 'e_pin'&& details?.services?.display_name.toLowerCase() !== 'airtime'">
+
+                                            {{details?.services?.name.toUpperCase()}}
+
+                                        </ng-container>
+
+                                        <ng-container *ngIf="details?.services?.display_name.toLowerCase() == 'coin'">
+                                            Coin Trade
+                                        </ng-container>
+
+                                        <ng-container
+                                                *ngIf="details?.services?.display_name.toLowerCase() == 'airtime'">
+                                            Airtime Service
+                                        </ng-container>
+                                        <ng-container *ngIf="details?.services?.display_name.toLowerCase() == 'e_pin'">
+                                            Purchase E-Pin
+                                        </ng-container>
+                                    </h6>
+                                </div>
+
+                                <div *ngIf="details?.services?.display_name.toLowerCase() == 'airtime'"
+                                     style="display: flex; justify-content: space-around; margin-top: 10px; ">
+                                    <div class="airtime-service"
+                                         [ngClass]="{'airtime-service-active' : selectedAirtimeService == 'buy'}"
+                                         (click)="onSelectAirtimeService('buy')">
+                                        <h6>Buy Airtime</h6>
+                                    </div>
+                                    <div class="airtime-service"
+                                         [ngClass]="{'airtime-service-active' : selectedAirtimeService == 'sell'}"
+                                         (click)="onSelectAirtimeService('sell')">
+                                        <h6>Sell Airtime</h6>
+                                    </div>
+                                </div>
+
+                                <hr style="margin-top: 0;">
+
+                                <div style="padding: 20px;">
+
+                                    <form [formGroup]="services" (ngSubmit)="onConfirm()">
+                                        <ng-container
+                                                *ngIf="details?.services?.display_name.toLowerCase() == 'airtime'">
+
+                                            <ng-container *ngIf="selectedAirtimeService== 'buy'">
+                                                <div class="form-group">
+                                                    <div class="d-flex sm-flex-wrap fundings">
+                                                        <input type="number" class="form-control my-2"
+                                                               placeholder="Enter Phone Number"
+                                                               formControlName="service_number"/>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <div class="d-flex sm-flex-wrap fundings">
+                                                        <input type="number" class="form-control my-2"
+                                                               placeholder="Enter Amount"
+                                                               formControlName="amount"/>
+                                                    </div>
+                                                </div>
+
+                                                <div class="form-group">
+                                                    <div class="d-flex sm-flex-wrap fundings">
+                                                        <select class="form-control my-2" placeholder="Enter Amount"
+                                                                formControlName="sub_service">
+                                                            <option value="">Select Network</option>
+                                                            <option *ngFor="let service of details?.sub_service"
+                                                                    value="{{service?.sid}}">{{service?.name}}</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </ng-container>
+
+                                            <ng-container *ngIf="selectedAirtimeService== 'sell'">
+
+                                                <div class="alert alert-warning">
+                                                    <p style="font-size: 12px;">*WARNING
+                                                        Do NOT transfer to us FRAUDULENT AIRTIME. Legal action would be
+                                                        taken and YOU will be arrested and prosecuted. Pls, do not send
+                                                        us
+                                                        VTU, you Will not be paid if we discovered. We accept only SHARE
+                                                        N
+                                                        SELL.
+                                                        THANKS</p>
+                                                </div>
+
+                                                <div>
+
+                                                    <button type="button" class="btn btn-dark"
+                                                            (click)="airtimeServiceInformation = !airtimeServiceInformation">
+                                                        Attention <i class="fa fa-arrow-down"
+                                                                     *ngIf="airtimeServiceInformation"></i>
+                                                        <i *ngIf="!airtimeServiceInformation"
+                                                           class="fa fa-arrow-right"></i>
+                                                    </button>
+
+                                                    <div class="alert alert-info" style="margin-top: 5px;"
+                                                         *ngIf="airtimeServiceInformation">
+                                                        <ol
+                                                                style="padding-left: 10px; font-size: 10px;">
+                                                            <li>We accept MTN, 9MOBILE, AIRTEL, GLO airtime (share n
+                                                                sell,
+                                                                and
+                                                                recharge pin only)
+                                                            </li>
+                                                            <li>The minimum amount is <b>NGN</b>500 and maximum is
+                                                                <b>NGN</b>10,000
+                                                            </li>
+                                                            <li>To transfer mtn airtime: Dial *600*recipient
+                                                                number*amount*pin#
+                                                            </li>
+                                                            <li>To change mtn transfer pin: *600*default pin*new pin*new
+                                                                pin#
+                                                            </li>
+                                                            <li>To transfer 9mobile airtime: Dial
+                                                                *223*pin*amount*number#
+                                                            </li>
+                                                            <li>To change 9mobile transfer pin: Dial *247*default
+                                                                pin*new
+                                                                pin#
+                                                            </li>
+                                                            <li>To transfer airtime: Text "2U AirtelNumber Amount PIN"
+                                                                to
+                                                                432
+                                                            </li>
+                                                            <li>To change airtel transfer pin: Text "PIN DefaultPIN
+                                                                NewPIN"
+                                                                to
+                                                                432
+                                                            </li>
+                                                            <li>To transfer Glo airtime: Dial *131*recipient
+                                                                number*Amount*Password#
+                                                            </li>
+                                                            <li>To change Glo share Pin: Dial
+                                                                *132*defaultPIN*NewPIN*NewPIN#
+                                                            </li>
+                                                            <br>
+                                                            <li><b>OUR RATES:</b> MTN: 80%, 9MOBILE: 80%, GLO: 60%,
+                                                                AIRTEL:
+                                                                75%
+                                                            </li>
+                                                            <br>
+                                                            <li>We exchange the equivalent amount you place in your
+                                                                order at
+                                                                above rates
+                                                            </li>
+                                                            <li>If you are NOT sending airtime via your registered
+                                                                number,
+                                                                please include it in the message box
+                                                            </li>
+                                                            <li>Transfer airtime to us immediately using the above
+                                                                numbers
+                                                                and
+                                                                after confirmation you can click CASHOUT to withdraw
+                                                            </li>
+                                                        </ol>
+                                                    </div>
+                                                </div>
+
+                                                <div class="d-flex sm-flex-wrap fundings" style="margin-top: 15px;">
+                                                    <select class="form-control" formControlName="airtime_mode"
+                                                            (change)="onChangeAirtimePaymentMethod($event)">
+                                                        <option value="">Select Airtime Top Method</option>
+                                                        <option value="share_n_sell">Share-N-Sell</option>
+                                                        <option value="pin">Airtime Pin</option>
+                                                    </select>
+                                                </div>
+
+                                                <ng-container *ngIf="selectAirtimeFundingMethod == 'share_n_sell'">
+                                                    <div class="d-flex sm-flex-wrap fundings" style="margin-top: 15px;">
+                                                        <select class="form-control" formControlName="network">
+                                                            <option value="">Select Network</option>
+                                                            <option *ngFor="let network of details?.phone_number; let i= index"
+                                                                    value="{{network?.name}}">{{network?.name}}
+                                                                ({{network?.phone}})
+                                                            </option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="d-flex sm-flex-wrap fundings" style="margin-top: 15px;">
+                                                        <input type="number" class="form-control my-2"
+                                                               placeholder="Enter Amount"
+                                                               formControlName="amount"/>
+                                                    </div>
+
+
+                                                    <div class="d-flex sm-flex-wrap fundings">
+                                                        <input type="number" class="form-control my-2"
+                                                               placeholder="Sender Phone Number"
+                                                               formControlName="phone_number"/>
+                                                    </div>
+
+                                                </ng-container>
+
+                                                <ng-container *ngIf="selectAirtimeFundingMethod == 'pin'">
+                                                    <div class="d-flex sm-flex-wrap fundings" style="margin-top: 15px;">
+                                                        <select class="form-control" formControlName="network">
+                                                            <option value="">Select Network</option>
+                                                            <option *ngFor="let network of details?.phone_number; let i= index"
+                                                                    value="{{network?.name}}">{{network?.name}}
+                                                                ({{network?.phone}})
+                                                            </option>
+                                                        </select>
+                                                    </div>
+
+                                                    <div class="d-flex sm-flex-wrap fundings" style="margin-top: 15px;">
+                                                        <input type="number" class="form-control my-2"
+                                                               placeholder="Enter Amount"
+                                                               formControlName="amount"/>
+                                                    </div>
+
+
+                                                    <div class="d-flex sm-flex-wrap fundings">
+                                                        <input type="number" class="form-control my-2"
+                                                               placeholder="Sender Phone Number"
+                                                               formControlName="phone_number"/>
+                                                    </div>
+
+                                                    <div class="d-flex sm-flex-wrap fundings">
+                                        <textarea class="form-control my-2" placeholder="Enter Pin"
+                                                  formControlName="airtime_pins"></textarea>
+                                                    </div>
+                                                    <small style="color: red;">Note: For multiple pin seperate by comma
+                                                        (,)</small>
+
+                                                </ng-container>
+                                            </ng-container>
+
+                                        </ng-container>
+
+                                        <ng-container
+                                                *ngIf="details?.services?.display_name.toLowerCase() == 'data' || details?.services?.display_name.toLowerCase() == 'internet_service'">
+
+                                            <div class="form-group">
+                                                <div class="d-flex sm-flex-wrap fundings">
+                                                    <input type="number" class="form-control my-2"
+                                                           placeholder="Enter Phone Number"
+                                                           formControlName="service_number"/>
+                                                </div>
+                                            </div>
+
+
+                                            <div class="form-group">
+                                                <div class="d-flex sm-flex-wrap fundings">
+                                                    <select class="form-control my-2" placeholder="Enter Amount"
+                                                            formControlName="sub_service"
+                                                            (change)="onSelectNetwork($event)">
+                                                        <option value="">Select Network</option>
+                                                        <option *ngFor="let service of details?.sub_service"
+                                                                value="{{service?.sid}}">{{service?.name}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <div class="d-flex sm-flex-wrap fundings">
+                                                    <select class="form-control my-2" placeholder="Enter Amount"
+                                                            formControlName="plan" (change)="onPlanSelected($event)">
+                                                        <option value=""> Select Plan</option>
+                                                        <option *ngFor="let plan of plans"
+                                                                value="{{plan?.pid}}">{{plan?.name}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <div class="d-flex sm-flex-wrap fundings">
+                                                    <input type="number" class="form-control my-2"
+                                                           placeholder="Enter Amount"
+                                                           formControlName="amount" readonly/>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+
+                                        <ng-container *ngIf="details?.services?.display_name.toLowerCase() == 'cable'">
+
+                                            <div class="form-group">
+                                                <div class="d-flex sm-flex-wrap fundings">
+                                                    <input type="number" class="form-control my-2"
+                                                           placeholder="Smart Card Number"
+                                                           formControlName="service_number"/>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <div class="d-flex sm-flex-wrap fundings">
+                                                    <select class="form-control my-2" placeholder="Enter Amount"
+                                                            formControlName="sub_service"
+                                                            (change)="onSelectCableService($event)">
+                                                        <option value="">Select Cable Service</option>
+                                                        <option *ngFor="let service of details?.sub_service"
+                                                                value="{{service?.sid}}">{{service?.name}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <div class="d-flex sm-flex-wrap fundings">
+                                                    <select class="form-control my-2" placeholder="Enter Amount"
+                                                            formControlName="plan" (change)="onPlanSelected($event)">
+                                                        <option value=""> Select Plan</option>
+                                                        <option *ngFor="let plan of plans"
+                                                                value="{{plan?.pid}}">{{plan?.name}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <div class="d-flex sm-flex-wrap fundings">
+                                                    <input type="number" class="form-control my-2"
+                                                           placeholder="Enter Amount"
+                                                           formControlName="amount" readonly/>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+
+                                        <ng-container
+                                                *ngIf="details?.services?.display_name.toLowerCase() == 'electricity'">
+
+                                            <div class="form-group">
+                                                <div class="d-flex sm-flex-wrap fundings">
+                                                    <input type="number" class="form-control my-2"
+                                                           placeholder="Smart Card Number"
+                                                           formControlName="service_number"/>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <div class="d-flex sm-flex-wrap fundings">
+                                                    <select class="form-control my-2" placeholder="Enter Amount"
+                                                            formControlName="sub_service">
+                                                        <option value="">Select Disco</option>
+                                                        <option *ngFor="let service of details?.sub_service"
+                                                                value="{{service?.sid}}">{{service?.name}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <div class="d-flex sm-flex-wrap fundings">
+                                                    <select class="form-control my-2" placeholder="Enter Amount"
+                                                            formControlName="electricity_type">
+                                                        <option value="">Select Tariff Type</option>
+                                                        <option value="POSTPAID">POSTPAID</option>
+                                                        <option value="PREPAID">PREPAID</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+
+                                            <div class="form-group">
+                                                <div class="d-flex sm-flex-wrap fundings">
+                                                    <input type="number" class="form-control my-2"
+                                                           placeholder="Enter Amount"
+                                                           formControlName="amount"/>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+
+                                        <ng-container
+                                                *ngIf="details?.services?.display_name.toLowerCase() !== 'coin' && details?.services?.display_name.toLowerCase() !== 'e_pin'">
+                                            <div class="d-flex sm-flex-wrap fundings" style="margin-top: 30px;">
+                                                <button class="btn btn-dark" [disabled]="onConfirmLoading">
+                                                    Submit
+                                                    <i class="fa fa-spin fa-spinner" *ngIf="onConfirmLoading"></i>
+                                                </button>
+                                            </div>
+                                        </ng-container>
+
+                                    </form>
+
+                                </div>
+
+                            </div>
+                        </div>
+                    </ng-container>
+
+                    <ng-container *ngIf="details?.services?.display_name.toLowerCase() == 'coin'">
+                        <div class="col-lg-6 my-4 center-div" style="    margin: 0 auto;">
+                            <div class="card shadow"
+                                 style="max-height: 100%; height: 100%; border-radius: 0; padding: 10px;">
+                                <ng-container *ngIf="coinService">
+
+
+                                </ng-container>
+
+                                <ng-container *ngIf="!coinService">
+
+                                    <ng-container *ngIf="onServiceTypeSelected">
+
+
+                                        <ng-container *ngIf="coinServiceTypeSelected.type === 'sell'">
+
+                                            <div class="row" style="    display: flex;
+                                                            justify-content: center; cursor: pointer; flex-direction: column; padding: 20px; width: 100%">
+                                                <div class="row" style="width: 100%; margin: 0 auto;">
+                                                    <div class="form-group" style="width: 100%;">
+                                                        <label>Enter Amount (USD) {{dollarRateSelling | number}}
+                                                            /$ </label>
+                                                        <input class="form-control" type="number"
+                                                               [(ngModel)]="coinQuery.amount"
+                                                               placeholder="Enter coin amount to sell in (USD)"
+                                                               (keyup)="updatePrice($event)"/>
+                                                        <ng-container *ngIf="currentRate !== 0">
+                                                            <ng-container *ngIf="coinLoading">
+                                                                <i class="fa fa-spin fa-spinner"></i>
+                                                            </ng-container>
+                                                            <ng-container *ngIf="!coinLoading">
+                                                                BTC: {{currentRate}} --
+                                                            </ng-container>
+
+                                                        </ng-container>
+                                                        <span *ngIf="coinQuery.amount !== ''">NGN : {{nairaRate | number}}</span>
+                                                    </div>
+                                                </div>
+
+                                                <div class="row" style="    margin-left: 5px;">
+                                                    <button class="btn bg-brown" (click)="confirmCoin()">Sell Coin
+                                                    </button>
+
+                                                    <button class="btn btn-dark" style="margin-left: 15px;"
+                                                            (click)="cancelCoinProcess()">Cancel
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+
+                                        <ng-container *ngIf="coinServiceTypeSelected.type == 'buy'">
+                                            <div class="row" style="    display: flex;
+                                                            justify-content: center; cursor: pointer; flex-direction: column; padding: 20px; width: 100%">
+                                                <div class="row" style="width: 100%; margin: 0 auto;">
+                                                    <div class="form-group" style="width: 100%;">
+                                                        <label>Enter Amount (USD) -  {{dollarRateBuying | number}}
+                                                            /$</label>
+                                                        <input class="form-control" type="text"
+                                                               [(ngModel)]="coinQuery.amount"
+                                                               placeholder="Enter coin amount to buy (USD)"
+                                                               (keyup)="updatePrice($event)"/>
+                                                        <ng-container *ngIf="currentRate !== 0">
+                                                            <ng-container *ngIf="coinLoading">
+                                                                <i class="fa fa-spin fa-spinner"></i>
+                                                            </ng-container>
+                                                            <ng-container *ngIf="!coinLoading">
+                                                                BTC: {{currentRate}} --
+                                                            </ng-container>
+
+                                                        </ng-container>
+                                                        <span *ngIf="coinQuery.amount !== ''">NGN : {{nairaRate | number}}</span>
+                                                    </div>
+                                                </div>
+
+
+                                                <label>Enter Wallet Address
+                                                </label>
+                                                <input class="form-control" type="text"
+                                                       [(ngModel)]="coinQuery.wallet_address"
+                                                       placeholder="Enter coin wallet address"
+                                                       style="margin-bottom:10px;"/>
+
+
+                                                <div class="row" style="    margin-left: 5px; ">
+                                                    <button class="btn bg-brown" (click)="confirmCoin()">Buy Coin
+                                                    </button>
+
+                                                    <button class="btn btn-dark" style="margin-left: 15px;"
+                                                            (click)="cancelCoinProcess()">Cancel
+                                                    </button>
+                                                </div>
+                                            </div>
+
+                                        </ng-container>
+
+                                    </ng-container>
+
+                                    <div class="row " style="    display: flex;
+                                                            justify-content: center; cursor: pointer;">
+
+                                        <ng-container *ngIf="!onServiceTypeSelected">
+                                            <div class="col-md-6 " (click)="onSelectCoinType('buy')"
+                                                 style="margin-bottom: 15px;">
+                                                <div class="card shadow border" style="padding: 10px;">
+                                                    <p class="paragraph">
+                                                        Buying Rate:</p>
+                                                    <p class="paragraph"
+                                                       style="color: #299D82; margin-bottom: 10px !important; margin-top: 7px !important;">
+                                                        NGN{{dollarRateBuying | number}}/$</p>
+                                                    <span class="btn btn-blue-outline"
+                                                          (click)="onSelectCoinType('buy')"
+                                                          style="background-color: #299D82; border:none;"> Buy Coin</span>
+
+                                                </div>
+                                            </div>
+
+                                            <div class="col-md-6 ">
+                                                <div class="card shadow border" style="padding: 10px;">
+                                                    <p class="paragraph">Selling Rate:</p>
+                                                    <p class="paragraph"
+                                                       style="color: red; margin-bottom: 10px !important; margin-top: 7px !important;">
+                                                        NGN{{dollarRateSelling | number}}/$</p>
+                                                    <span class="btn btn-blue-outline"
+                                                          (click)="onSelectCoinType('sell')"
+                                                          style="background-color: #DA5151; border: none;"> Sell Coin</span>
+                                                </div>
+                                            </div>
+                                        </ng-container>
+
+
+                                    </div>
+
+                                </ng-container>
+                            </div>
+                        </div>
+                    </ng-container>
+
+                    <ng-container *ngIf="details?.services?.display_name.toLowerCase() == 'e_pin'">
+                        <div class="col-lg-6 my-4 center-div" style="    margin: 0 auto;">
+                            <div class="alert alert-info">
+                                NaijaSub E-pins give you both digital and offline access to recharge
+                                anytime, anywhere.
+                            </div>
+
+
+                            <ng-container *ngIf="details.eligible_e_pin_generation == 'false'">
+
+                                <ng-container *ngIf="!subscribe_e_pin">
+                                    <div class="col-xl-12">
+                                        <!--begin::Tiles Widget 7-->
+                                        <div class="card card-custom bgi-no-repeat gutter-b card-stretch"
+                                             style="background-color: #1B283F; background-position: calc(100% + 0.5rem) calc(100% + 0.5rem); background-size: 90% auto; background-image: url('assets/img/rhone-2.svg');    background-repeat: no-repeat;">
+                                            <!--begin::Body-->
+                                            <div class="card-body">
+                                                <div class="p-4">
+                                                    <h3 class="text-white font-weight-bolder my-7"></h3>
+                                                    <p class="text-muted font-size-lg mb-7">
+                                                        You must poses at least a minimum
+                                                        <br/> of {{0 | currency : 'NGN' : 'symbol-narrow'}} as
+                                                        subscription
+                                                        <br/> fee to this service or you must
+                                                        <br/>be on DEALER or plan.</p>
+                                                    <a class="btn btn-blue-outline font-weight-bold px-6 py-3"
+                                                       (click)="onSubscribe()">Subscribe to EPIN</a>
+                                                </div>
+                                            </div>
+                                            <!--end::Body-->
+                                        </div>
+                                        <!--end::Tiles Widget 7-->
+                                    </div>
+                                </ng-container>
+
+
+                                <ng-container *ngIf="subscribe_e_pin">
+
+                                    <ng-container *ngIf="!subscribe_fee">
+                                        <div class="row">
+                                            <div class="col-xl-12">
+                                                <!--begin::Mixed Widget 10-->
+                                                <div class="card card-custom gutter-b"
+                                                     style="height: 150px;  box-shadow: 0px 0px 30px 0px rgba(82, 63, 105, 0.05) !important; border: 0;">
+                                                    <!--begin::Body-->
+                                                    <div class="card-body d-flex align-items-center justify-content-between flex-wrap">
+                                                        <div class="mr-2">
+                                                            <h3 class="font-weight-bolder">Subscribe By </h3>
+                                                            <div class="text-dark-50 font-size-lg mt-2">
+                                                                Paying a subscription fee
+                                                                of {{500 | currency : 'NGN' : 'symbol-narrow'}}
+                                                            </div>
+                                                        </div>
+                                                        <button (click)="subscribeEPin()"
+                                                                class="btn btn-dark font-weight-bold py-3 px-6"
+                                                                style="color: white;" [disabled]="subscribeLoader">
+                                                            <ng-container *ngIf="!subscribeLoader">
+                                                                Subscribe
+                                                            </ng-container>
+
+                                                            <ng-container *ngIf="subscribeLoader">
+                                                                Please wait <i class="fa fa-spin fa-spinner"></i>
+                                                            </ng-container>
+
+                                                        </button>
+                                                    </div>
+                                                    <!--end::Body-->
+                                                </div>
+                                                <!--end::Mixed Widget 10-->
+                                            </div>
+                                            <div class="col-xl-12" style="margin-top: 10px; ">
+                                                <!--begin::Mixed Widget 10-->
+                                                <div class="card card-custom gutter-b"
+                                                     style="height: 150px;  box-shadow: 0px 0px 30px 0px rgba(82, 63, 105, 0.05) !important; border: 0;">
+                                                    <!--begin::Body-->
+                                                    <div class="card-body d-flex align-items-center justify-content-between flex-wrap">
+                                                        <div class="mr-2">
+                                                            <h3 class="font-weight-bolder">Subscribe By</h3>
+                                                            <div class="text-dark-50 font-size-lg mt-2">
+                                                                Upgrading account level to Dealer
+                                                            </div>
+                                                        </div>
+                                                        <a (click)="onUpgrade()"
+                                                           class="btn btn-dark font-weight-bold py-3 px-6"
+                                                           style="color: white;">Upgrade Now</a>
+                                                    </div>
+                                                    <!--end::Body-->
+                                                </div>
+                                                <!--end::Mixed Widget 10-->
+                                            </div>
+                                        </div>
+                                    </ng-container>
+
+                                </ng-container>
+
+                            </ng-container>
+
+
+                            <ng-container *ngIf="details.eligible_e_pin_generation == 'true'">
+
+                                <div class="card shadow"
+                                     style="max-height: 100%; height: 100%; border-radius: 0; padding: 10px;">
+                                    <div class="form-group">
+                                        <div class="d-flex sm-flex-wrap fundings">
+                                            <select class="form-control my-2" placeholder="Enter Amount"
+                                                    [(ngModel)]="ePinQuery.network">
+                                                <option value="">Select Network</option>
+                                                <option value="mtn">MTN</option>
+                                                <option value="glo">Glo</option>
+                                                <option value="airtel">AIRTEL</option>
+                                                <option value="9mobile">9-Mobile</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <div class="d-flex sm-flex-wrap fundings">
+                                            <select class="form-control my-2" placeholder="Enter Amount"
+                                                    [(ngModel)]="ePinQuery.type">
+                                                <option value="">Select Type</option>
+                                                <option value="airtime">Airtime</option>
+                                                <option value="data">Data</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <div class="d-flex sm-flex-wrap fundings">
+                                            <input type="number" class="form-control my-2"
+                                                   placeholder="Enter Amount"
+                                                   [(ngModel)]="ePinQuery.amount"/>
+                                        </div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <small style="color: red;">Total number of E-Pin to purchase</small>
+                                        <div class="d-flex sm-flex-wrap fundings">
+                                            <input type="number" class="form-control my-2"
+                                                   placeholder="E-Pin Count"
+                                                   [(ngModel)]="ePinQuery.purchase_count"/>
+                                        </div>
+                                    </div>
+
+
+                                    <div class="d-flex sm-flex-wrap fundings" style="margin-top: 30px;">
+
+                                        <button class="btn btn-dark" [disabled]="buyEPinLoader"
+                                                (click)="purchaseEPin()">
+                                            Confirm Purchase
+                                            <i class="fa fa-spin fa-spinner" *ngIf="buyEPinLoader"></i>
+                                        </button>
+                                    </div>
+                                </div>
+
+                            </ng-container>
+                        </div>
+                    </ng-container>
+
+                </ng-container>
+                <ng-container *ngIf="preview">
+                    <div class="col-lg-4 my-4 center-div" style="    margin: 0 auto;">
+
+                        <div class="card shadow" style="max-height: 100%; height: 100%; border-radius: 0; ">
+                            <div style="padding: 20px" class="succes-rep">
+
+
+                                <p class="subtle">Transaction Type </p>
+                                <p class="main-text"
+                                   *ngIf="details?.services?.display_name.toLowerCase() !== 'airtime'">
+                                    {{details?.services?.name.toUpperCase()}}</p>
+                                <p class="main-text"
+                                   *ngIf="details?.services?.display_name.toLowerCase() === 'airtime'">
+                                    {{selectedAirtimeService.toUpperCase()}} AIRTIME
+                                </p>
+
+                                <ng-container *ngIf="details?.services?.display_name.toLowerCase() == 'airtime'">
+                                    <ng-container *ngIf="selectedAirtimeService == 'buy'">
+                                        <p class="subtle">Network </p>
+                                        <p class="main-text text-uppercase">
+                                            {{extraDetails?.sub_service_details?.name.toUpperCase()}}
+                                        </p>
+
+                                        <p class="subtle">Phone Number</p>
+                                        <p class="main-text text-uppercase">
+                                            {{services.get('service_number').value}}
+                                        </p>
+
+                                        <p class="subtle">Amount Charged</p>
+                                        <p class="main-text text-uppercase">
+                                            {{extraDetails?.amount_charge}}
+                                        </p>
+                                    </ng-container>
+
+                                    <ng-container *ngIf="selectedAirtimeService == 'sell'">
+                                        <p class="subtle">Network </p>
+                                        <p class="main-text text-uppercase">
+                                            {{services.get('network').value}}
+                                        </p>
+
+                                        <p class="subtle">Airtime Sale Type </p>
+                                        <p class="main-text text-uppercase">
+                                            {{services.get('airtime_mode').value.toUpperCase()}}
+                                        </p>
+
+                                        <p class="subtle" *ngIf="services.get('airtime_pins').value">Pin(s) </p>
+                                        <p class="main-text text-uppercase">
+                                            {{services.get('airtime_pins').value}}
+                                        </p>
+
+                                    </ng-container>
+
+
+                                </ng-container>
+
+                                <ng-container
+                                        *ngIf="details?.services?.display_name.toLowerCase() == 'data' || details?.services?.display_name.toLowerCase() =='internet_service'">
+                                    <p class="subtle">Network </p>
+                                    <p class="main-text text-uppercase">
+                                        {{extraDetails?.sub_service_details?.name.toUpperCase()}}
+                                    </p>
+
+                                    <p class="subtle">Plan </p>
+                                    <p class="main-text text-uppercase">
+                                        {{selectedPlan?.name}}
+                                    </p>
+
+
+                                    <p class="subtle">Phone Number</p>
+                                    <p class="main-text text-uppercase">
+                                        {{services.get('service_number').value}}
+                                    </p>
+
+                                    <p class="subtle">Amount Charged</p>
+                                    <p class="main-text text-uppercase">
+                                        {{extraDetails?.amount_charge}}
+                                    </p>
+
+                                    <p class="subtle"
+                                       *ngIf="details?.services?.display_name.toLowerCase() =='internet_service'">
+                                        Customer Name</p>
+                                    <p class="main-text text-uppercase"
+                                       *ngIf="details?.services?.display_name.toLowerCase() =='internet_service'">
+                                        {{customerInternetServiceDetails?.customer_name || 'Customer'}}
+                                    </p>
+
+                                </ng-container>
+
+                                <ng-container *ngIf="details?.services?.display_name.toLowerCase() == 'cable'">
+                                    <p class="subtle">Network </p>
+                                    <p class="main-text text-uppercase">
+                                        {{extraDetails?.sub_service_details?.name.toUpperCase()}}
+                                    </p>
+
+                                    <p class="subtle">Plan </p>
+                                    <p class="main-text text-uppercase">
+                                        {{selectedPlan?.name}}
+                                    </p>
+
+
+                                    <p class="subtle">Phone Number</p>
+                                    <p class="main-text text-uppercase">
+                                        {{services.get('service_number').value}}
+                                    </p>
+
+                                    <p class="subtle">Amount Charged</p>
+                                    <p class="main-text text-uppercase">
+                                        {{extraDetails?.amount_charge}}
+                                    </p>
+
+                                </ng-container>
+
+                                <ng-container *ngIf="details?.services?.display_name.toLowerCase() == 'electricity'">
+                                    <p class="subtle">Disco </p>
+                                    <p class="main-text text-uppercase">
+                                        {{extraDetails?.sub_service_details?.name.toUpperCase()}}
+                                    </p>
+
+
+                                    <p class="subtle">Meter Number</p>
+                                    <p class="main-text text-uppercase">
+                                        {{services.get('service_number').value}}
+                                    </p>
+
+                                    <p class="subtle">Amount Charged</p>
+                                    <p class="main-text text-uppercase">
+                                        {{extraDetails?.amount_charge}}
+                                    </p>
+
+                                    <p class="subtle">Customer Name</p>
+                                    <p class="main-text text-uppercase">
+                                        {{customerDetailsElectricity?.customer_name || 'Customer'}}
+                                    </p>
+
+                                    <p class="subtle">Customer Address</p>
+                                    <p class="main-text text-uppercase">
+                                        {{customerDetailsElectricity?.customer_address || 'Customer Address'}}
+                                    </p>
+
+                                </ng-container>
+
+                                <ng-container *ngIf="details?.services?.display_name.toLowerCase() == 'coin'">
+                                    <ng-container *ngIf="coinServiceTypeSelected.type == 'sell'">
+                                        <p class="subtle">Selling Price</p>
+                                        <p class="main-text text-uppercase">
+                                            {{dollarRateSelling | currency :'USD':'symbol-narrow'}}
+                                        </p>
+
+                                        <p class="subtle">Naira Equivalent</p>
+                                        <p class="main-text text-uppercase">
+                                            &#x20A6;{{nairaRate | number}}
+                                        </p>
+                                        <p class="subtle">BTC Value</p>
+                                        <p class="main-text text-uppercase">
+                                            {{currentRate}}
+                                        </p>
+
+                                        <ng-container *ngIf="coinDetailSell">
+
+                                            <p class="subtle">BTC Amount</p>
+                                            <p class="main-text text-uppercase">
+                                                {{coinDetailSell?.amount}}
+                                            </p>
+
+
+                                            <p class="subtle">Address (send into address)</p>
+                                            <p class="main-text text-uppercase">
+                                                {{coinDetailSell?.address}}
+                                                <i class="fa fa-copy"
+                                                   (click)="copyBtcWalletAddress(userDetails?.wallet_id)"
+                                                   style="right: 15px; font-size: 17px;"></i>
+                                            </p>
+
+                                            <p class="subtle">Scan to send (send into address)</p>
+                                            <p class="main-text text-uppercase">
+                                                <img src="{{coinDetailSell?.qrcode_url}}" alt="sell"/>
+                                            </p>
+
+                                            <p class="subtle" style="color: red;">Note: Wallet wold be funded when there
+                                                is
+                                                a coin equivalent sent to the above address.</p>
+                                        </ng-container>
+
+                                    </ng-container>
+                                    <ng-container *ngIf="coinServiceTypeSelected.type == 'buy'">
+                                        <p class="subtle">Buying Price</p>
+                                        <p class="main-text text-uppercase">
+                                            {{dollarRateBuying | currency :'USD':'symbol-narrow'}}
+                                        </p>
+
+                                        <p class="subtle">Naira Equivalent</p>
+                                        <p class="main-text text-uppercase">
+                                            &#x20A6;{{nairaRate | number}}
+                                        </p>
+
+                                        <p class="subtle">BTC Value</p>
+                                        <p class="main-text text-uppercase">
+                                            {{currentRate}}
+                                        </p>
+
+                                        <p class="subtle">Address (send into address)</p>
+                                        <p class="main-text text-uppercase">
+                                            {{coinQuery.wallet_address}}
+                                            <i class="fa fa-copy" (click)="copyBtcWalletAddress(userDetails?.wallet_id)"
+                                               style="right: 15px; font-size: 17px;"></i>
+                                        </p>
+
+                                    </ng-container>
+
+                                </ng-container>
+
+                                <div class="row" *ngIf="details?.services?.display_name.toLowerCase() !== 'coin'">
+                                    <div class="col-4">
+                                        <p class="subtle">Discount</p>
+                                        <p class="main-text text-uppercase">
+                                            {{extraDetails?.discount || 0}} %
+                                        </p>
+                                    </div>
+
+                                    <div class="col-4" *ngIf="details?.services?.name.toLowerCase() !== 'coin'">
+                                        <p class="subtle">Total</p>
+                                        <p class="main-text">&#x20A6;{{services.get('amount').value | number}}</p>
+                                        <br>
+                                    </div>
+
+                                    <div class="col-4" *ngIf="details?.services?.name.toLowerCase() == 'coin'">
+                                        <p class="subtle">Total</p>
+                                        <p class="main-text">&#x20A6;{{coinQuery.amount | number}}</p>
+                                        <br>
+                                    </div>
+
+                                </div>
+
+                                <ng-container *ngIf="!coinDetailSell">
+                                    <div class="row">
+
+                                        <div class="d-flex sm-flex-wrap fundings"
+                                             style="margin-left: 10px; margin-bottom: 15px;">
+                                            <input type="number" class="form-control my-2"
+                                                   placeholder="Enter Transaction Pin"
+                                                   (change)="onChangePin($event)"/>
+                                        </div>
+
+                                    </div>
+
+
+                                    <div class="formg">
+                                        <div style="width: 100%;">
+                                            <button class="btn btn-dark buy"
+                                                    (click)='onPurchase()' [disabled]="purchaseLoading">
+                                                Confirm
+                                                <i class="fa fa-spin fa-spinner" *ngIf="purchaseLoading"></i>
+                                            </button>
+
+                                        </div>
+                                        <div class="acc">
+                            <span> Not correct?
+                                <a href="#" (click)='preview = false'> Cancel</a>
+                            </span>
+                                        </div>
+
+                                    </div>
+                                </ng-container>
+
+                            </div>
+                        </div>
+
+                    </div>
+                </ng-container>
+            </ng-container>
+
+            <ng-container *ngIf="service == 'bill_payment'">
+                <div class="col-lg-5 my-4 center-div" style="    margin: 0 auto;">
+                    <div class="card shadow" style="max-height: 100%; height: 100%; border-radius: 0; ">
+
+                        <div style="padding: 10px; padding-bottom: 0 !important;"
+                             *ngIf="details?.services?.display_name.toLowerCase() !== 'airtime'">
+                            <h6>
+                                Bill Payment
+                            </h6>
+                        </div>
+
+
+                        <hr style="margin-top: 0;">
+
+                        <div style="padding: 20px;">
+
+
+                            <div class="form-group">
+                                <div class="d-flex sm-flex-wrap fundings">
+                                    <select class="form-control my-2"
+                                            placeholder="Select Bill Payment Service"
+                                            (change)="onChangeService($event)">
+                                        <option value="">Select Bill Payment Service</option>
+                                        <option value="cable">Cable Service</option>
+                                        <option value="electricity">Electricity Service</option>
+                                        <option value="internet_service">Internet Service</option>
+                                    </select>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+    </section>
+</ng-container>

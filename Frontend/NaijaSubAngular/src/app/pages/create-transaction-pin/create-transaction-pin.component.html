@@ -1,0 +1,57 @@
+<app-loader *ngIf="loading"></app-loader>
+
+<app-network-error *ngIf="network" (onReloadEvent)="onReload()"></app-network-error>
+
+<ng-container *ngIf="success">
+
+    <div id="profile">
+        <div class="d-body pt-5">
+            <div style="margin: 10px;">
+                <div class="row" style="    margin-top: 60px;">
+                    <div class="col-lg-5 col-sm-12 my-4 center-div" style="margin: 0 auto;">
+
+                        <div class="card" style="min-height: 300px; border-radius: 0;">
+
+
+                            <p style="padding: 20px;">Create Transaction Pin
+                                <small style="font-size: 13px; color: red;">Note: Your pin is a 4 digit number for
+                                    verifying
+                                    transactions.</small>
+                            </p>
+
+                            <div style="padding: 20px;">
+
+                                <form [formGroup]="createPin" (ngSubmit)="onCreatePin()">
+
+                                    <div class="form-group">
+                                        <input class="form-control " placeholder="Enter Pin" type="number"
+                                               formControlName="pin"/>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <input class="form-control" placeholder="Confirm Pin" type="number"
+                                               formControlName="confirm_pin"/>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <button class="btn common-btn  bg-brown" [disabled]="submit">
+                                            Create Pin
+                                            <i class="fa fa-spin fa-spinner" *ngIf="submit"></i>
+                                        </button>
+                                    </div>
+                                </form>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</ng-container>
+

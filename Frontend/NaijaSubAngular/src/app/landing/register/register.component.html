@@ -1,0 +1,175 @@
+<app-sidebar></app-sidebar>
+<div class="main-content bg-white">
+
+    <div class="my-17 px-8 personal-information">
+
+        <div>
+            <h3 class="font30 font-bold lh-1">
+                Create Account
+            </h3>
+
+        </div>
+        <form [formGroup]="register" (ngSubmit)="onRegister()">
+            <div class="row my-5">
+
+
+                <div class="col-lg-6 col-sm-12">
+                    <div class="my-3">
+                        <label class="text-grey">First Name</label>
+                        <input
+                                type="text"
+                                class="border form-control "
+                                placeholder="First Name"
+                                formControlName="name"
+                                [ngClass]="{ 'is-invalid': submitted && f.name.errors}"
+                        />
+                        <div class="invalid-feedback" *ngIf='submitted && f.name.errors'>
+                            <div *ngIf="f.name.errors.required">Full Name is required *</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-12">
+                    <div class="my-3">
+                        <label class="text-grey">Last Name</label>
+                        <input type="text" class="border form-control" placeholder="Enter Last Name"
+                               formControlName="last_name"
+                               [ngClass]="{ 'is-invalid': submitted && f.last_name.errors}"/>
+                        <div class="invalid-feedback" *ngIf='submitted && f.last_name.errors'>
+                            <div *ngIf="f.last_name.errors.required">Last Name is required *</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-12">
+                    <div class="my-3">
+                        <label class="text-grey">Email Address</label>
+                        <input
+                                type="email"
+                                class="border form-control"
+                                placeholder="snefisat@example.com"
+                                formControlName="email"
+                                [ngClass]="{ 'is-invalid': submitted && f.email.errors}"
+                        />
+                        <div class="invalid-feedback" *ngIf='submitted && f.email.errors'>
+                            <div *ngIf="f.email.errors.required">Email Address is required *</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-12">
+                    <div class="my-3">
+                        <label class="text-grey">Username</label>
+                        <input
+                                type="text"
+                                class="border form-control"
+                                placeholder="fancyname1"
+                                formControlName="user_name"
+                                [ngClass]="{ 'is-invalid': submitted && f.email.errors}"
+                        />
+                        <div class="invalid-feedback" *ngIf='submitted && f.user_name.errors'>
+                            <div *ngIf="f.user_name.errors.required">Username is required *</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-6 col-sm-12">
+                    <div class="my-3">
+                        <label class="text-grey">Password</label>
+                        <input
+                                type="password"
+                                class="border form-control"
+                                placeholder="********"
+                                formControlName="password"
+                                [ngClass]="{ 'is-invalid': submitted && f.password.errors}"
+                        />
+                        <div class="invalid-feedback" *ngIf='submitted && f.password.errors'>
+                            <div *ngIf="f.password.errors.required">Password is required *</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-sm-12">
+                    <div class="my-3">
+                        <label class="text-grey">Confirm Password</label>
+                        <input
+                                type="password"
+                                class="border form-control"
+                                placeholder="********"
+                                formControlName="confirm_password"
+                                [ngClass]="{ 'is-invalid': submitted && f.confirm_password.errors}"
+                        />
+                        <div class="invalid-feedback" *ngIf='submitted && f.confirm_password.errors'>
+                            <div *ngIf="f.confirm_password.errors.required">Confirm Password is required *</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-sm-12">
+                    <div class="my-3">
+                        <label class="text-grey">Phone Number</label>
+                        <input
+                                type="number"
+                                class="border form-control"
+                                placeholder="+2348100000001"
+                                formControlName="phone"
+                                [ngClass]="{ 'is-invalid': submitted && f.phone.errors}"
+                        />
+                        <div class="invalid-feedback" *ngIf='submitted && f.phone.errors'>
+                            <div *ngIf="f.phone.errors.required">Phone number is required *</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-sm-12">
+                    <div class="my-3">
+                        <label class="text-grey"> State of Residence </label>
+                        <input
+                                type="text"
+                                placeholder="Lagos" 
+                                class="border form-control text-uppercase"
+                                formControlName="state_of_residence"
+                        />
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-sm-12"  *ngIf="ref !== 'admin'">
+                    <div class="my-3">
+                        <label class="text-grey">Referral Username (Upline)</label>
+                        <input
+                                type="text"
+                                class="border form-control text-uppercase"
+                                readonly
+                                formControlName="referral"
+                        />
+                    </div>
+                </div>
+
+                <div class="col-lg-5 col-sm-12">
+                    <div class="my-3 d-flex align-items-center">
+                        <div class="p-r">
+                            <label class="check-container">
+                                <input type="checkbox"/>
+                                <span class="checkmark"></span>
+                            </label>
+                        </div>
+                        <span class="text-grey">I Accept the <span
+                                class="text-underline">Terms & Conditions</span></span>
+                    </div>
+                </div>
+                <div class="col-lg-2 col-sm-12"></div>
+
+            </div>
+            <div class="text-right">
+                <button class="btn common-btn border-brown text-brown" [disabled]="loading">
+                    Sign up
+                    <i class="fa fa-spin fa-spinner" *ngIf="loading"></i></button>
+            </div>
+        </form>
+        <div class="my-4">
+            <p class="font14 text-grey">
+                Already have an account?
+                <span class="font14 mb-0 click text-underline text-brown" routerLink="/login" style="color: #484848;">
+        Login here
+        </span>
+            </p>
+        </div>
+    </div>
+    <app-footer class="mt-auto"></app-footer>
+</div>

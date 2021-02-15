@@ -1,0 +1,204 @@
+<nav class="navbar fixed-top navbar-expand-lg navbar-light bg-light">
+    <div class="container">
+        <a class="navbar-brand" routerLink="/dashboard">
+            <img src="assets/img/logoNs.png" alt="naijasub"/>
+        </a>
+        <button
+                class="navbar-toggler"
+                type="button"
+                data-toggle="collapse"
+                data-target="#navbarSupportedContent"
+                aria-controls="navbarSupportedContent"
+                aria-expanded="false"
+                aria-label="Toggle navigation"
+
+                (click)="isOpen = true"
+        >
+            <span class="fa fa-reorder" style="color: #ffffff;"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent" [ngClass]="{'show': isOpen }">
+            <ul class="navbar-nav mx-auto">
+                <li
+                        class="nav-item mr-3"
+                        routerLinkActive="active"
+                        [routerLinkActiveOptions]="{ exact: true }"
+                >
+                    <a class="nav-link" routerLink="/dashboard/account" (click)="isOpen = false">Homepage</a>
+                </li>
+                <li
+                        class="nav-item mr-3"
+                        routerLinkActive="active"
+                        [routerLinkActiveOptions]="{ exact: true }"
+                >
+                    <!--                    <a class="nav-link" routerLink="/dashboard/services" (click)="isOpen = false">Services</a>-->
+                    <div class="dropdown">
+                        <div
+                                class="click dropdown-toggle"
+                                id="dropdownMenuButton"
+                                data-toggle="dropdown"
+                                aria-haspopup="true"
+                                aria-expanded="false"
+                        >
+                            <div>
+                                <div class="profile d-flex align-items-center">
+                                    <p
+                                            class="font14 pr-3 text-white mb-0 nav-link"
+                                            style="line-height: 1;"
+                                    >
+                                        Services <i class="fa fa-angle-down ml-2"></i>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <ng-container *ngFor="let service of details?.services; let i= index">
+
+                                <a
+
+                                        class="dropdown-item font12 py-2 font-bold"
+                                        routerLink="/dashboard/purchase/{{service?.display_name}}"
+                                        style="color: #17273c !important;"
+                                        (click)="isOpen = false"
+                                        *ngIf="service?.display_name !== 'electricity' && service?.display_name !== 'cable' && service?.display_name !== 'internet_service'">
+                                    {{service?.name}}
+                                </a>
+
+                            </ng-container>
+
+                            <a
+
+                                    class="dropdown-item font12 py-2 font-bold"
+                                    routerLink="/dashboard/purchase/bill_payment"
+                                    style="color: #17273c !important;"
+                                    (click)="isOpen = false"
+                            >
+                                Bill Payment
+                            </a>
+                            <a
+
+                                    class="dropdown-item font12 py-2 font-bold"
+                                    style="color: #17273c !important;"
+                                    (click)="isOpen = false"
+                            >
+                                NS Mart  <small>(coming soon)</small>
+                            </a>
+
+
+                        </div>
+                    </div>
+
+                </li>
+                <!--                <li-->
+                <!--                        class="nav-item mr-3"-->
+                <!--                        routerLinkActive="active"-->
+                <!--                        [routerLinkActiveOptions]="{ exact: true }"-->
+                <!--                >-->
+                <!--                    <a class="nav-link" routerLink="/dashboard/funding" (click)="isOpen = false">Fund Wallet</a>-->
+                <!--                </li>-->
+                <li
+                        class="nav-item mr-3"
+                        routerLinkActive="active"
+                        [routerLinkActiveOptions]="{ exact: true }"
+                >
+                    <a class="nav-link" routerLink="/dashboard/wallet" (click)="isOpen = false">Wallet</a>
+                </li>
+                <li
+                        class="nav-item mr-3"
+                        routerLinkActive="active"
+                        [routerLinkActiveOptions]="{ exact: true }"
+                >
+                    <a class="nav-link" routerLink='/dashboard/transaction' (click)="isOpen = false">Transaction</a>
+                </li>
+                <li
+                        class="nav-item mr-3"
+                        routerLinkActive="active"
+                        [routerLinkActiveOptions]="{ exact: true }"
+                >
+                    <a class="nav-link" routerLink='/dashboard/down-line' (click)="isOpen = false">DownLine</a>
+                </li>
+            </ul>
+
+            <div class="d-flex align-items-center lg-text-right">
+                <div class="profile d-flex align-items-center">
+                    <div class="dropdown">
+                        <div
+                                class="click dropdown-toggle"
+                                id="dropdownMenuButton"
+                                data-toggle="dropdown"
+                                aria-haspopup="true"
+                                aria-expanded="false"
+                        >
+                            <div>
+                                <div class="profile d-flex align-items-center">
+                                    <p
+                                            class="font14 pr-3 text-white mb-0"
+                                            style="line-height: 1;"
+                                    >
+                                        Hi {{name}} <i class="fa fa-angle-down ml-2"></i>
+                                    </p>
+                                    <span>
+                    <img
+                            class="rounded-circle mr-3"
+                            src="{{userDetails?.avater}}"
+                            onerror="this.src='assets/img/user.png'"
+                    />
+                  </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a
+                                    class="dropdown-item font12 py-2 font-bold"
+                                    routerLink="/dashboard/settings"
+                                    style="color: #17273c !important;"
+                                    (click)="isOpen = false">Account Settings</a>
+
+                            <a
+                                    class="dropdown-item font12 py-2"
+                                    (click)="onLogOut()"
+                                    style="color: #17273c !important;"
+                            >Log Out</a
+                            >
+                        </div>
+                    </div>
+
+                    <div class="dropdown notification-dropdown">
+                        <div
+                                class="dropdown-toggle"
+                                id="dropdownMenuButton"
+                                data-toggle="dropdown"
+                                aria-haspopup="true"
+                                aria-expanded="false"
+                        >
+                            <div class="notification p-r">
+                                <div class="notification-dot">{{notificationCount}}</div>
+                                <i class="fa fa-bell font24 text-white"></i>
+                            </div>
+                        </div>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton" style="height: 300px;overflow: auto;">
+                            <ul>
+
+                                <li class="dropdown-item" *ngIf="notificationCount == 0">
+                                    No Notification
+                                </li>
+
+                                <ng-container *ngFor="let notification of notificationList; let i= index">
+                                    <li class="dropdown-item" (click)="onViewNotification(i)">
+                                        {{notification?.message}}
+                                    </li>
+                                    <hr/>
+                                </ng-container>
+                                <li style="cursor: pointer; text-align: center;" class="dropdown-item" *ngIf="notificationCount > 0 " routerLink="/dashboard/notification">
+                                    <span style="text-align: center; width: 100%;"
+                                          >View More</span>
+                                </li>
+
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>

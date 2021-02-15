@@ -1,0 +1,34 @@
+<section class="d-body bg-white">
+    <div>
+        <div class="text-center py-4">
+            <img src="assets/img/logoNs.png" alt="" class="my-5" style="width: 10%;"/>
+        </div>
+        <div class="container">
+            <div class="row my-5 sm-reverse">
+                <div class="col-lg-6 col-sm-12 sm-mt">
+                    <img src="assets/img/bg1.svg" alt="" class="w-100">
+                </div>
+                <div class="col-lg-1 col-sm-12"></div>
+                <div class="col-lg-5 col-sm-12 my-auto">
+                    <div class="bg-grey py-5 px-4 border-radius">
+                        <p class="font30 font-bold" style="color: #1D293F;">You're Almost There!</p>
+                        <p class="font18 text-grey">
+                            Hi! your account is been verified so you can start using NaijaSub.
+                        </p>
+                        <button class="btn common-btn bg-brown my-4 w-100 text-white py-3" [disabled]="verified">
+
+                            <span *ngIf="!verified">Proceed to login </span>
+                            <i class="fa fa-spin fa-spinner" *ngIf="verifying"></i>
+                        </button>
+
+
+                        <div class="font14 text-grey text-center font-light">Questions? Email us at <a
+                                href="mailto:info@naijasub.com"
+                                class="text-brown text-underline">support@naijasub.com</a></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <app-footer class="mt-auto container"></app-footer>
+</section>

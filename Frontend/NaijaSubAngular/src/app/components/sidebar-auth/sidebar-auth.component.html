@@ -1,0 +1,61 @@
+<div class="menu-icon">
+    <i
+            class="menu-icon fa fa-bars font20 pt-3 ml-3"
+            (click)="sidebarToggle()"
+    ></i>
+</div>
+<section class="sidebar" [ngClass]="{ 'sidebar-isOpen': isOpen }">
+    <div class="sidebar-wrapper">
+        <div class="d-body">
+            <div>
+                <img src="assets/img/logoNs.png" alt="" />
+                <ul class="my-17 font14 text-white">
+                    <li
+                            class="my-3"
+                            routerLinkActive="active"
+                            [routerLinkActiveOptions]="{ exact: true }"
+                            routerLink="/dashboard"
+                     (click)="isOpen = !isOpen">
+                        <span class="active-line"></span> Dashboard
+                    </li>
+                    <li
+                            class="my-3"
+                            routerLinkActive="active"
+                            [routerLinkActiveOptions]="{ exact: true }"
+                            routerLink="/orders"
+                            (click)="isOpen = !isOpen">
+                        <span class="active-line"></span> Orders
+                    </li>
+                    <li
+                            class="my-3"
+                            routerLinkActive="active"
+                            [routerLinkActiveOptions]="{ exact: true }"
+                            routerLink="/profile"
+                            (click)="isOpen = !isOpen">
+                        <span class="active-line"></span> Profile
+                    </li>
+                    <li
+                            class="my-3"
+                            routerLinkActive="active"
+                            [routerLinkActiveOptions]="{ exact: true }"
+                            routerLink="/messages"
+                            (click)="isOpen = !isOpen">
+                        <span class="active-line"></span> Messages
+                    </li>
+                    <li
+                            class="my-3"
+                            routerLinkActive="active"
+                            [routerLinkActiveOptions]="{ exact: true }"
+                            routerLink="/"
+                    >
+                        <span class="active-line"></span> Blog & Resourcs
+                    </li>
+                </ul>
+            </div>
+            <div class="mt-auto text-white font14 ">
+                <h3 class="font14">View Baker Profile</h3>
+                <p class="pb-5">Logout</p>
+            </div>
+        </div>
+    </div>
+</section>
